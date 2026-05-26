@@ -1,0 +1,51 @@
+# === NETBEANS SPECIFIC ===
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbdist/
+dist/
+nbactions.xml
+nb-configuration.xml
+
+# === MAVEN SPECIFIC ===
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.nextDevelopmentVersion
+pom.xml.releaseBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# === IDEs & EDITORS (Juste au cas où un membre utilise autre chose) ===
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+*.launch
+
+# VS Code
+.vscode/
+
+# === OPERATING SYSTEMS ===
+.DS_Store
+Thumbs.db
+*.bak
+*.log
+
+# === SQLITE (Si votre BDD est créée dans le dossier du projet) ===
+# On ignore le fichier de base de données pour éviter que chacun écrase celle des autres.
+# Laissez cette ligne si vous voulez que chacun ait sa base locale.
+*.db
+*.sqlite
