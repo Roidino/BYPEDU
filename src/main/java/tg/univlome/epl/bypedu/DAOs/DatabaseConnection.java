@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * @author Savastano
  */
 public class DatabaseConnection {
-    private static final String url = "jdbc:sqlite:database.db";
+    private static final String URL = "jdbc:sqlite:src/main/resources/tg/univlome/epl/bypedu/database.db";
     private static Connection connection;
             
     private DatabaseConnection(){
@@ -23,7 +23,7 @@ public class DatabaseConnection {
     public static Connection getDatabase(){
         if (connection == null) {
             try {
-                connection =  DriverManager.getConnection(url);
+                connection =  DriverManager.getConnection(URL);
             } catch (SQLException ex) {
                 System.getLogger(DatabaseConnection.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
