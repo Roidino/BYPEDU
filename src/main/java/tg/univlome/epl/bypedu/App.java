@@ -48,15 +48,21 @@ public class App extends Application {
         }
     }
     
-    public static void Loader(String fxml) {
-        BorderPane root = null;
-        try {
-            root = FXMLLoader.load(App.class.getResource(fxml + ".fxml"));
-        } catch (IOException ex) {
-            System.out.println("Erreur de chargement de " + fxml);
+   public static void Loader(String fxml) {
+    try {
+        var url = App.class.getResource(fxml + ".fxml");
+        System.out.println(">>> URL cours.fxml : " + url);
+        if (url == null) {
+            System.out.println(">>> FICHIER NULL - non trouvé dans le classpath");
+            return; // évite le crash
         }
+        BorderPane root = FXMLLoader.load(url);
         scene.setRoot(root);
+    } catch (Exception ex) {
+        System.out.println(">>> EXCEPTION : " + ex.getMessage());
+        ex.printStackTrace();
     }
+}
     
     public static void main(String[] args){
         launch();
