@@ -6,7 +6,10 @@
 
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@styles/accueil.css" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" id="root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
+    <left>
+        <fx:include source="sidebar.fxml" fx:id="sidebar"/>
+    </left>
+    <center>
       <Label text="Accueil" BorderPane.alignment="CENTER">
          <font>
             <Font size="40.0" />
