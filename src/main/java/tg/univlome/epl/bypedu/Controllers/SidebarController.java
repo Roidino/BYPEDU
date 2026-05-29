@@ -4,7 +4,6 @@
  */
 package tg.univlome.epl.bypedu.Controllers;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;

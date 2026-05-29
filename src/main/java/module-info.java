@@ -5,6 +5,7 @@ module tg.univlome.epl.bypedu {
 
     opens tg.univlome.epl.bypedu to javafx.fxml;
     opens tg.univlome.epl.bypedu.Controllers to javafx.fxml;
+    opens tg.univlome.epl.bypedu.models to javafx.base, javafx.fxml;
     
     exports tg.univlome.epl.bypedu;
 }

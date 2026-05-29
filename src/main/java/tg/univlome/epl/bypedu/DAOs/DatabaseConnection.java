@@ -16,9 +16,7 @@ public class DatabaseConnection {
     private static final String URL = "jdbc:sqlite:src/main/resources/tg/univlome/epl/bypedu/database.db";
     private static Connection connection;
             
-    private DatabaseConnection(){
-        
-    }
+    private DatabaseConnection() {}
     
     public static Connection getDatabase(){
         if (connection == null) {

@@ -1,0 +1,27 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 29 mai 2026, 17:16:40
+    Author     : Savastano
+*/
+
+
+#center {
+    -fx-padding: 30px;
+}
+
+#top {
+    -fx-padding: 20px 0px;
+}
+
+#titre {
+    -fx-font-size: 20px;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+#ajouter {
+    -fx-background-color: blue;
+}
