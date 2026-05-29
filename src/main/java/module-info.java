@@ -4,5 +4,7 @@ module tg.univlome.epl.bypedu {
     requires java.sql;
 
     opens tg.univlome.epl.bypedu to javafx.fxml;
+    opens tg.univlome.epl.bypedu.Controllers to javafx.fxml;
+    
     exports tg.univlome.epl.bypedu;
 }
