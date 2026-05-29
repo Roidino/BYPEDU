@@ -4,7 +4,7 @@
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="tg.univlome.epl.bypedu.controller.CoursController">
+            fx:controller="tg.univlome.epl.bypedu.Controllers.CoursController">
 
     <!-- HEADER -->
     <top>

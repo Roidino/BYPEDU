@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package tg.univlome.epl.bypedu.controller;
+package tg.univlome.epl.bypedu.Controllers;
 
 /**
  *
@@ -14,8 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import tg.univlome.epl.bypedu.dao.CoursDAO;
-import tg.univlome.epl.bypedu.model.Cours;
+import tg.univlome.epl.bypedu.DAOs.CoursDAO;
+import tg.univlome.epl.bypedu.Models.Cours;
 
 import java.net.URL;
 import java.util.List;
