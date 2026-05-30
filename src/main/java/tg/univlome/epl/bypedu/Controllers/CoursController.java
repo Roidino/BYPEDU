@@ -6,7 +6,7 @@ package tg.univlome.epl.bypedu.Controllers;
 
 /**
  *
- * @author user
+ * @author Terence PEKPELI
  */
 
 import javafx.fxml.FXML;
@@ -36,7 +36,7 @@ public class CoursController implements Initializable {
 
     private void chargerCours() {
         coursContainer.getChildren().clear();
-        List<Cours> liste = coursDAO.findAll();
+        List<Cours> liste = coursDAO.getAll();
         for (Cours c : liste) {
             coursContainer.getChildren().add(creerCartesCours(c));
         }
@@ -123,7 +123,7 @@ public class CoursController implements Initializable {
         Dialog<Cours> dialog = creerFormulaire(null);
         Optional<Cours> result = dialog.showAndWait();
         result.ifPresent(c -> {
-            coursDAO.save(c);
+            coursDAO.ajoute(c);
             chargerCours();
         });
     }
@@ -148,25 +148,33 @@ public class CoursController implements Initializable {
         grid.setHgap(10); grid.setVgap(10);
         grid.setPadding(new Insets(20));
 
-        TextField tfIntitule      = new TextField();
-        TextField tfClasse   = new TextField();
-        TextField tfEns      = new TextField();
-        TextField tfVol      = new TextField();
-        TextField tfCoef     = new TextField();
+        TextField tfIntitule = new TextField();
+        
+        // Remplacement des TextFields par des ComboBox
+        ComboBox<String> cbClasse = new ComboBox<>();
+        ComboBox<String> cbEns = new ComboBox<>();
+        
+        TextField tfVol = new TextField();
+        TextField tfCoef = new TextField();
 
+        // Remplissage dynamique des menus déroulants avec les données de la DB
+        cbClasse.getItems().setAll(coursDAO.getAllClasses());
+        cbEns.getItems().setAll(coursDAO.getAllEnseignants());
+
+        // Pré-remplissage en cas de modification
         if (coursExistant != null) {
             tfIntitule.setText(coursExistant.getIntitule());
-            tfClasse.setText(coursExistant.getClasse());
-            tfEns.setText(coursExistant.getEnseignant());
+            cbClasse.setValue(coursExistant.getClasse());
+            cbEns.setValue(coursExistant.getEnseignant());
             tfVol.setText(String.valueOf(coursExistant.getVolumeHoraire()));
             tfCoef.setText(String.valueOf(coursExistant.getCoefficient()));
         }
 
-        grid.addRow(0, new Label("Nom:"),             tfIntitule);
-        grid.addRow(1, new Label("Classe:"),          tfClasse);
-        grid.addRow(2, new Label("Enseignant:"),      tfEns);
-        grid.addRow(3, new Label("Volume (h/sem):"),  tfVol);
-        grid.addRow(4, new Label("Coefficient:"),     tfCoef);
+        grid.addRow(0, new Label("Intitulé :"),    tfIntitule);
+        grid.addRow(1, new Label("Classe :"),      cbClasse);
+        grid.addRow(2, new Label("Enseignant :"),  cbEns);
+        grid.addRow(3, new Label("Volume (h/sem):"), tfVol);
+        grid.addRow(4, new Label("Coefficient :"), tfCoef);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -174,8 +182,8 @@ public class CoursController implements Initializable {
             if (btn == btnOk) {
                 Cours c = coursExistant != null ? coursExistant : new Cours();
                 c.setIntitule(tfIntitule.getText());
-                c.setClasse(tfClasse.getText());
-                c.setEnseignant(tfEns.getText());
+                c.setClasse(cbClasse.getValue());      // Utilisation de .getValue()
+                c.setEnseignant(cbEns.getValue());     // Utilisation de .getValue()
                 c.setVolumeHoraire(Integer.parseInt(tfVol.getText()));
                 c.setCoefficient(Integer.parseInt(tfCoef.getText()));
                 return c;
