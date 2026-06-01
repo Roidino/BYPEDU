@@ -11,43 +11,50 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/etudiant.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tg.univlome.epl.bypedu.Controllers.EtudiantController">
+<BorderPane id="root" maxHeight="-Infinity" maxWidth="-Infinity" 
+            minHeight="-Infinity" minWidth="-Infinity" 
+            prefHeight="400.0" prefWidth="600.0" 
+            stylesheets="@styles/etudiant.css" 
+            xmlns="http://javafx.com/javafx/26" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tg.univlome.epl.bypedu.Controllers.EtudiantController" >
     <left>
         <fx:include source="sidebar.fxml" fx:id="sidebar"/>
     </left>
     <center>
-      <VBox id="center" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <HBox id="top" prefHeight="37.0" prefWidth="600.0">
-               <children>
-                  <Label id="titre" text="Gestion d'etudiant" HBox.hgrow="SOMETIMES" />
-                  <Region prefHeight="31.0" prefWidth="370.0" HBox.hgrow="ALWAYS" />
-                  <Button id="ajouter" mnemonicParsing="false" text="+ Ajouter un etudiant" />
-               </children>
-            </HBox>
-            <VBox prefHeight="365.0" prefWidth="600.0" spacing="10.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <HBox prefHeight="38.0" prefWidth="600.0" spacing="10.0">
-                     <children>
-                        <TextField promptText="Rechercher un etudiant..." />
-                        <ChoiceBox prefWidth="150.0" />
-                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" text="Rechercher" />
-                     </children>
-                  </HBox>
-                  <TableView fx:id="tableau" prefHeight="372.0" prefWidth="600.0" VBox.vgrow="ALWAYS" columnResizePolicy="CONSTRAINED_RESIZE_POLICY">
+        <VBox id="center" BorderPane.alignment="CENTER"
+              VBox.vgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10"
+                      prefHeight="50" VBox.vgrow="NEVER">
+                    <children>
+                        <Label id="titre" text="Gestion d'etudiant"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button id="ajouter" mnemonicParsing="false" text="+ Ajouter un etudiant"/>
+                    </children>
+                </HBox>
+                <HBox spacing="10" alignment="CENTER_LEFT" prefHeight="40" VBox.vgrow="NEVER">
+                    <children>
+                        <TextField fx:id="champRecherche" prefWidth="280" promptText="Rechercher un etudiant..."/>
+                        <ChoiceBox fx:id="filtreClasse" prefWidth="160"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </children>
+                </HBox>
+                <TableView fx:id="tableau" maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn fx:id="colonneNom" prefWidth="75.0" text="Nom" />
-                      <TableColumn fx:id="colonnePrenom" prefWidth="75.0" text="Prenon(s)" />
-                      <TableColumn fx:id="colonneAge" prefWidth="75.0" text="Age" />
-                      <TableColumn fx:id="colonneClasse" prefWidth="75.0" text="Classe" />
-                      <TableColumn fx:id="colonneMoyenne" prefWidth="75.0" text="Moyenne" />
-                      <TableColumn fx:id="colonneNumero" prefWidth="75.0" text="Numero Parent" />
+                        <TableColumn fx:id="colonneNom" text="Nom"/>
+                        <TableColumn fx:id="colonnePrenom" text="Prénom(s)"/>
+                        <TableColumn fx:id="colonneAge" text="Âge"/>
+                        <TableColumn fx:id="colonneClasse" text="Classe"/>
+                        <TableColumn fx:id="colonneMoyenne" text="Moyenne"/>
+                        <TableColumn fx:id="colonneNumero" text="Numéro Parent"/>
+                        <TableColumn fx:id="colonneActions" text="Actions"/>
                     </columns>
-                  </TableView>
-               </children>
-            </VBox>
-         </children>
-      </VBox>
-   </center>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+            </children>
+        </VBox>
+    </center>
 </BorderPane>

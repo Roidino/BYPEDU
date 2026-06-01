@@ -14,16 +14,18 @@ public class Etudiant {
     private int id;
     private String nom;
     private String prenom;
-    private int telephone;
+    private String telephone;
     private LocalDate date_naissance;
     private int classe_id;
     private String status;
     private LocalDate date_inscription;
+    private String classe;    
+    private double moyenne;
 
     public Etudiant() {
     }
 
-    public Etudiant(int id, String nom, String prenom, int telephone, LocalDate date_naissance, int classe_id, String status, LocalDate date_inscription) {
+    public Etudiant(int id, String nom, String prenom, String telephone, LocalDate date_naissance, int classe_id, String status, LocalDate date_inscription, String classe, Double moyenne) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -32,6 +34,8 @@ public class Etudiant {
         this.classe_id = classe_id;
         this.status = status;
         this.date_inscription = date_inscription;
+        this.classe = classe;
+        this.moyenne = moyenne;
     }
 
     public int getId() {
@@ -46,7 +50,7 @@ public class Etudiant {
         return prenom;
     }
 
-    public int getTelephone() {
+    public String getTelephone() {
         return telephone;
     }
 
@@ -60,6 +64,14 @@ public class Etudiant {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getClasse() {
+        return classe;
+    }
+
+    public double getMoyenne() {
+        return moyenne;
     }
 
     public LocalDate getDate_inscription() {
@@ -78,10 +90,10 @@ public class Etudiant {
         this.prenom = prenom;
     }
 
-    public void setTelephone(int telephone) {
+    public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-
+    
     public void setDate_naissance(LocalDate date_naissance) {
         this.date_naissance = date_naissance;
     }
@@ -98,10 +110,21 @@ public class Etudiant {
         this.date_inscription = date_inscription;
     }
 
+    public void setClasse(String classe) {
+        this.classe = classe;
+    }
+
+    public void setMoyenne(double moyenne) {
+        this.moyenne = moyenne;
+    }
+
     @Override
     public String toString() {
         return "Etudiant{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", telephone=" + telephone + ", date_naissance=" + date_naissance + ", classe_id=" + classe_id + ", status=" + status + ", date_inscription=" + date_inscription + '}';
     }
 
-    
+    public int getAge() {
+        if (date_naissance == null) return 0;
+        return LocalDate.now().getYear() - date_naissance.getYear();
+    }
 }

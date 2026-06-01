@@ -8,20 +8,131 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 */
 
 
+/* ===== GLOBAL ===== */
+#root {
+    -fx-background-color: #111827;
+}
+
+/* ===== CENTER ===== */
 #center {
-    -fx-padding: 30px;
+    -fx-background-color: #F9FAFB;
+    -fx-padding: 30px 40px;
+    -fx-spacing: 20px;
 }
 
-#top {
-    -fx-padding: 20px 0px;
-}
-
+/* ===== TITRE + BOUTON AJOUTER ===== */
 #titre {
-    -fx-font-size: 20px;
-    -fx-text-fill: black;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
+    -fx-text-fill: #111827;
 }
 
 #ajouter {
-    -fx-background-color: blue;
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 18px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+#ajouter:hover {
+    -fx-background-color: #1D4ED8;
+}
+
+/* ===== BARRE RECHERCHE ===== */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 14px;
+    -fx-font-size: 13px;
+    -fx-pref-width: 280px;
+    -fx-prompt-text-fill: #9CA3AF;
+}
+
+.text-field:focused {
+    -fx-border-color: #2563EB;
+}
+
+/* ===== CHOICEBOX CLASSES ===== */
+.choice-box {
+    -fx-background-color: white;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 4px 10px;
+    -fx-font-size: 13px;
+}
+
+/* ===== TABLEAU ===== */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 0px;
+}
+
+/* En-têtes des colonnes */
+.table-view .column-header-background {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 14px 10px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* Lignes */
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #F3F4F6 transparent;
+    -fx-padding: 8px 0px;
+    -fx-font-size: 13px;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #F9FAFB;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #EFF6FF;
+}
+
+/* Cellules */
+.table-cell {
+    -fx-text-fill: #374151;
+    -fx-padding: 14px 10px;
+    -fx-border-color: transparent;
+}
+
+/* Enlever les lignes de séparation verticales */
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+/* Scrollbar discrète */
+.table-view .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6px;
+}
+
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #D1D5DB;
+    -fx-background-radius: 4px;
 }

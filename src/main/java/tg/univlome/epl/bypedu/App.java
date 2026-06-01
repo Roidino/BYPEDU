@@ -54,6 +54,7 @@ public class App extends Application {
             root = FXMLLoader.load(App.class.getResource(fxml + ".fxml"));
         } catch (IOException ex) {
             System.out.println("Erreur de chargement de " + fxml);
+            return;
         }
         scene.setRoot(root);
     }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tg.univlome.epl.bypedu.Controllers.FormulaireEtudiantController"
+      spacing="20" prefWidth="450"
+      style="-fx-background-color: white; -fx-padding: 30;">
+
+    <Label fx:id="titreFormulaire" text="Ajouter un étudiant"
+           style="-fx-font-size:18px; -fx-font-weight:bold; -fx-text-fill:#111827;"/>
+
+    <GridPane hgap="15" vgap="12">
+
+        <!-- Nom -->
+        <Label text="Nom *" GridPane.rowIndex="0" GridPane.columnIndex="0"
+               style="-fx-font-weight:bold;"/>
+        <TextField fx:id="champNom" promptText="Nom de l'étudiant"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"
+                   prefWidth="260"/>
+
+        <!-- Prénom -->
+        <Label text="Prénom *" GridPane.rowIndex="1" GridPane.columnIndex="0"
+               style="-fx-font-weight:bold;"/>
+        <TextField fx:id="champPrenom" promptText="Prénom de l'étudiant"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <!-- Date de naissance -->
+        <Label text="Date de naissance *" GridPane.rowIndex="2" GridPane.columnIndex="0"
+               style="-fx-font-weight:bold;"/>
+        <DatePicker fx:id="champDateNaissance"
+                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <!-- Téléphone -->
+        <Label text="Téléphone" GridPane.rowIndex="3" GridPane.columnIndex="0"
+               style="-fx-font-weight:bold;"/>
+        <TextField fx:id="champTelephone" promptText="Ex: 90 00 00 00"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <!-- Classe -->
+        <Label text="Classe *" GridPane.rowIndex="4" GridPane.columnIndex="0"
+               style="-fx-font-weight:bold;"/>
+        <ComboBox fx:id="champClasse" prefWidth="260"
+                  GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <!-- Statut -->
+        <Label text="Statut" GridPane.rowIndex="5" GridPane.columnIndex="0"
+               style="-fx-font-weight:bold;"/>
+        <ComboBox fx:id="champStatut" prefWidth="260"
+                  GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <!-- Message d'erreur -->
+    <Label fx:id="messageErreur" text=""
+           style="-fx-text-fill:#DC2626; -fx-font-size:12px;"/>
+
+    <!-- Boutons -->
+    <HBox spacing="10" style="-fx-alignment: CENTER-RIGHT;">
+        <Button text="Annuler" onAction="#annuler"
+                style="-fx-background-color:#F3F4F6; -fx-text-fill:#374151;
+                       -fx-background-radius:8; -fx-cursor:hand;
+                       -fx-padding: 10 20;"/>
+        <Button fx:id="btnSauvegarder" text="Sauvegarder" onAction="#sauvegarder"
+                style="-fx-background-color:#2563EB; -fx-text-fill:white;
+                       -fx-background-radius:8; -fx-cursor:hand;
+                       -fx-font-weight:bold; -fx-padding: 10 20;"/>
+    </HBox>
+
+</VBox>
