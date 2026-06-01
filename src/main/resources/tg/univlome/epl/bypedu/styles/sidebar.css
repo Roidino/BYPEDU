@@ -1,0 +1,90 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 28 mai 2026, 15:54:22
+    Author     : Savastano
+*/
+
+* {
+    -fx-font-family: "Inter";
+}
+
+.sidebar {
+    -fx-background-color: #0D47A1;
+    -fx-padding: 20px;
+    -fx-min-width: 220px;
+}
+
+.sidebar-top {
+    -fx-spacing: 10px;
+    -fx-padding: 0px 15px 20px 15px;
+}
+
+#name {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+#desc {
+    -fx-text-fill: #9EB3D4;
+}
+
+.sidebar-logo {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}
+
+.sidebar-logo {
+    -fx-icon-color: #9EB3D4;
+    -fx-icon-size: 16px;
+}
+
+#text {
+    -fx-text-fill: #9EB3D4;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 16px;
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9EB3D4;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 10px 16px;
+    -fx-cursor: hand;
+    -fx-max-width: Infinity;
+    -fx-background-radius: 8px;
+    -fx-graphic-text-gap: 10;
+}
+
+.nav-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-text-fill: white;
+}
+
+.nav-btn-active {
+    -fx-background-color: #2563EB; 
+    -fx-text-fill: white;    
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 10px 16px;
+    -fx-cursor: hand;
+    -fx-max-width: Infinity;
+    -fx-background-radius: 8px;
+    -fx-graphic-text-gap: 10;
+}
+
+.nav-icon {
+    -fx-icon-color: #9EB3D4;
+    -fx-icon-size: 16px;
+}
+
+#separator {
+    -fx-padding: 0px 0px 0px 20px;
+}
