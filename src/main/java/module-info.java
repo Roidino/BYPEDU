@@ -2,9 +2,7 @@ module tg.univlome.epl.bypedu {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    requires org.kordamp.ikonli.core;
-    requires org.kordamp.ikonli.javafx;
-    requires org.kordamp.ikonli.fontawesome5; 
+    
     
     opens tg.univlome.epl.bypedu to javafx.fxml;
     opens tg.univlome.epl.bypedu.Controllers to javafx.fxml;

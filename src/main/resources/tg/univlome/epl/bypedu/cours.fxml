@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane stylesheets="@styles/accueil.css"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tg.univlome.epl.bypedu.Controllers.CoursController">
+    <left>
+        <fx:include source="sidebar.fxml" fx:id="sidebar"/>
+    </left>
+    <center>
+        <BorderPane>
+            <!-- HEADER -->
+            <top>
+                <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 20 30 10 30;">
+                    <Label text="Gestion des Cours"
+                           style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnAjouter"
+                            text="+ Ajouter un cours"
+                            onAction="#handleAjouter"
+                            style="-fx-background-color: #1a56db; -fx-text-fill: white;
+                                   -fx-background-radius: 8; -fx-padding: 8 16 8 16;
+                                   -fx-cursor: hand;"/>
+                </HBox>
+            </top>
+            <!-- CONTENU -->
+            <center>
+                <ScrollPane fitToWidth="true" style="-fx-background-color: #f4f6fb;">
+                    <FlowPane fx:id="coursContainer"
+                              hgap="20" vgap="20"
+                              style="-fx-padding: 20; -fx-background-color: #f4f6fb;"/>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>
