@@ -16,8 +16,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 /* ===== CENTER ===== */
 #center {
     -fx-background-color: #F9FAFB;
-    -fx-padding: 30px 40px;
-    -fx-spacing: 20px;
+    -fx-padding: 30 40 30 40;
+    -fx-spacing: 16;
 }
 
 /* ===== TITRE + BOUTON AJOUTER ===== */
@@ -32,8 +32,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-padding: 10px 18px;
-    -fx-background-radius: 8px;
+    -fx-padding: 10 18 10 18;
+    -fx-background-radius: 8;
     -fx-cursor: hand;
 }
 
@@ -45,11 +45,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .text-field {
     -fx-background-color: white;
     -fx-border-color: #D1D5DB;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-padding: 8px 14px;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 14 8 14;
     -fx-font-size: 13px;
-    -fx-pref-width: 280px;
     -fx-prompt-text-fill: #9CA3AF;
 }
 
@@ -61,22 +60,26 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .choice-box {
     -fx-background-color: white;
     -fx-border-color: #D1D5DB;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-padding: 4px 10px;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4 10 4 10;
     -fx-font-size: 13px;
+}
+
+.choice-box .label {
+    -fx-text-fill: #374151;
 }
 
 /* ===== TABLEAU ===== */
 .table-view {
     -fx-background-color: white;
     -fx-border-color: #E5E7EB;
-    -fx-border-radius: 12px;
-    -fx-background-radius: 12px;
-    -fx-padding: 0px;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 0;
 }
 
-/* En-têtes des colonnes */
+/* En-têtes */
 .table-view .column-header-background {
     -fx-background-color: white;
     -fx-border-color: transparent transparent #E5E7EB transparent;
@@ -85,7 +88,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .table-view .column-header {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-padding: 14px 10px;
+    -fx-padding: 12 10 12 10;
 }
 
 .table-view .column-header .label {
@@ -98,8 +101,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .table-row-cell {
     -fx-background-color: white;
     -fx-border-color: transparent transparent #F3F4F6 transparent;
-    -fx-padding: 8px 0px;
     -fx-font-size: 13px;
+    -fx-cell-size: 48px;
 }
 
 .table-row-cell:hover {
@@ -110,14 +113,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: #EFF6FF;
 }
 
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #1E40AF;
+}
+
 /* Cellules */
 .table-cell {
     -fx-text-fill: #374151;
-    -fx-padding: 14px 10px;
+    -fx-padding: 0 10 0 10;
     -fx-border-color: transparent;
+    -fx-alignment: CENTER-LEFT;
 }
 
-/* Enlever les lignes de séparation verticales */
+/* Séparateurs verticaux invisibles */
 .table-view .filler {
     -fx-background-color: transparent;
 }
@@ -134,5 +142,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .table-view .scroll-bar:vertical .thumb {
     -fx-background-color: #D1D5DB;
-    -fx-background-radius: 4px;
+    -fx-background-radius: 4;
+}
+
+.table-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
 }

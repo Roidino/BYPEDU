@@ -10,6 +10,7 @@ package tg.univlome.epl.bypedu.Controllers;
  */
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ import tg.univlome.epl.bypedu.models.Classe;
 import tg.univlome.epl.bypedu.models.Etudiant;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.scene.layout.HBox;
 
 public class FormulaireEtudiantController implements Initializable {
 
@@ -32,37 +34,38 @@ public class FormulaireEtudiantController implements Initializable {
     @FXML private TextField champTelephone;
     @FXML private ComboBox<String> champClasse;
     @FXML private ComboBox<String> champStatut;
-    @FXML private Label    messageErreur;
-    @FXML private Button   btnSauvegarder;
+    @FXML private Label messageErreur;
+    @FXML private Button btnSauvegarder;
+    @FXML private HBox errorMessage;
 
-    private Etudiant etudiant;        // null = ajout, rempli = modification
+    private Etudiant etudiant;    
     private boolean sauvegarde = false;
-    private List<Classe> classes;     // pour récupérer l'id depuis le nom
+    private List<Classe> classes; 
 
     private final EtudiantDAO etudiantDAO = new EtudiantDAO();
     private final ClasseDAO   classeDAO   = new ClasseDAO();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Charger les classes depuis la BDD
         classes = classeDAO.getAll();
+        if (classes == null) {
+            classes = new ArrayList<>();
+            System.out.println("ERREUR: ClasseDAO.getAll() a retourné null");
+        }
+
         champClasse.setItems(FXCollections.observableArrayList(
             classes.stream()
-       .map(Classe::getNom)
-       .collect(Collectors.toList())
+                   .map(Classe::getNom)
+                   .collect(Collectors.toList())
         ));
 
-        // Statuts disponibles
         champStatut.setItems(FXCollections.observableArrayList("ACTIF", "INACTIF"));
         champStatut.setValue("ACTIF");
     }
 
-    // Appelé depuis EtudiantController avant d'afficher le stage
     public void setEtudiant(Etudiant e) {
         this.etudiant = e;
-
         if (e != null) {
-            // Mode modification — remplir les champs
             titreFormulaire.setText("Modifier l'étudiant");
             btnSauvegarder.setText("Modifier");
             champNom.setText(e.getNom());
@@ -72,7 +75,6 @@ public class FormulaireEtudiantController implements Initializable {
             champClasse.setValue(e.getClasse());
             champStatut.setValue(e.getStatus());
         } else {
-            // Mode ajout
             titreFormulaire.setText("Ajouter un étudiant");
             btnSauvegarder.setText("Sauvegarder");
         }
@@ -80,12 +82,15 @@ public class FormulaireEtudiantController implements Initializable {
 
     @FXML
     private void sauvegarder() {
-        // Validation
         if (champNom.getText().isBlank()) {
+            errorMessage.setVisible(true);
+            errorMessage.setManaged(true);
             messageErreur.setText("Le nom est obligatoire.");
             return;
         }
         if (champPrenom.getText().isBlank()) {
+            errorMessage.setVisible(true);
+            errorMessage.setManaged(true);
             messageErreur.setText("Le prénom est obligatoire.");
             return;
         }
@@ -94,19 +99,17 @@ public class FormulaireEtudiantController implements Initializable {
             return;
         }
         if (champDateNaissance.getValue() == null) {
+            errorMessage.setVisible(true);
+            errorMessage.setManaged(true);
             messageErreur.setText("La date de naissance est obligatoire.");
             return;
         }
-
-        // Trouver l'id de la classe sélectionnée
         int classeId = classes.stream()
             .filter(c -> c.getNom().equals(champClasse.getValue()))
             .findFirst()
             .map(Classe::getId)
             .orElse(0);
-
         if (etudiant == null) {
-            // Mode ajout — créer un nouvel étudiant
             Etudiant nouveau = new Etudiant();
             nouveau.setNom(champNom.getText().trim());
             nouveau.setPrenom(champPrenom.getText().trim());
@@ -114,28 +117,28 @@ public class FormulaireEtudiantController implements Initializable {
             nouveau.setDate_naissance(champDateNaissance.getValue());
             nouveau.setClasse_id(classeId);
             nouveau.setStatus(champStatut.getValue());
-
             boolean ok = etudiantDAO.ajoute(nouveau);
             if (!ok) {
+                errorMessage.setVisible(true);
+                errorMessage.setManaged(true);
                 messageErreur.setText("Erreur lors de l'ajout.");
                 return;
             }
         } else {
-            // Mode modification — mettre à jour
             etudiant.setNom(champNom.getText().trim());
             etudiant.setPrenom(champPrenom.getText().trim());
             etudiant.setTelephone(champTelephone.getText().trim());
             etudiant.setDate_naissance(champDateNaissance.getValue());
             etudiant.setClasse_id(classeId);
             etudiant.setStatus(champStatut.getValue());
-
             boolean ok = etudiantDAO.update(etudiant);
             if (!ok) {
+                errorMessage.setVisible(true);
+                errorMessage.setManaged(true);
                 messageErreur.setText("Erreur lors de la modification.");
                 return;
             }
         }
-
         sauvegarde = true;
         fermerStage();
     }
@@ -150,7 +153,6 @@ public class FormulaireEtudiantController implements Initializable {
         stage.close();
     }
 
-    // EtudiantController vérifie si on a sauvegardé pour rafraîchir le tableau
     public boolean isSauvegarde() {
         return sauvegarde;
     }

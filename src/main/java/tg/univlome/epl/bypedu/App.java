@@ -2,9 +2,6 @@ package tg.univlome.epl.bypedu;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,7 +22,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException{
         BorderPane root = FXMLLoader.load(getClass().getResource("accueil.fxml"));
-        scene = new Scene(root, 720, 480);
+        scene = new Scene(root, 980, 620);
         stage.setScene(scene);
         stage.show();
     }

@@ -68,8 +68,8 @@ public class EtudiantController implements Initializable {
 
         colonneActions.setCellFactory(col -> new TableCell<Etudiant, Void>() {
 
-            private final Button btnEdit = new Button("✏ Modifier");
-            private final Button btnDel  = new Button("🗑 Supprimer");
+            private final Button btnEdit = new Button("Modifier");
+            private final Button btnDel  = new Button("Supprimer");
 
             {
                 btnEdit.setStyle(
@@ -77,14 +77,18 @@ public class EtudiantController implements Initializable {
                     "-fx-text-fill:white;" +
                     "-fx-background-radius:6;" +
                     "-fx-cursor:hand;" +
-                    "-fx-padding:5 8;");
+                    "-fx-padding:5 8;" +
+                    "fx-wrap-text: false;" +
+                    "-fx-text-overrun: clip;");
 
                 btnDel.setStyle(
                     "-fx-background-color:#EF4444;" +
                     "-fx-text-fill:white;" +
                     "-fx-background-radius:6;" +
                     "-fx-cursor:hand;" +
-                    "-fx-padding:5 8;");
+                    "-fx-padding:5 8;" +
+                     "fx-wrap-text: false;" +
+                    "-fx-text-overrun: clip;");
             }
 
             @Override
@@ -169,8 +173,7 @@ public class EtudiantController implements Initializable {
     private void ouvrirFormulaire(Etudiant etudiant) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource(
-                    "/tg/univlome/epl/bypedu/formulaireEtudiant.fxml"));
+                getClass().getResource("/tg/univlome/epl/bypedu/formulaireEtudiant.fxml"));
 
             javafx.scene.Parent root = loader.load();
 
@@ -198,22 +201,71 @@ public class EtudiantController implements Initializable {
     }
 
     private void confirmerSuppression(Etudiant etudiant) {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirmer la suppression");
-        confirm.setHeaderText("Supprimer " + etudiant.getNom()
-            + " " + etudiant.getPrenom() + " ?");
-        confirm.setContentText(
-            "Cette action est irréversible.\n" +
-            "Toutes les notes associées seront également supprimées.");
+        try {
+            Stage stage = new Stage();
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.setTitle("Confirmation");
 
-        ButtonType btnOui = new ButtonType("Oui, supprimer",
-                                           ButtonBar.ButtonData.OK_DONE);
-        ButtonType btnNon = new ButtonType("Annuler",
-                                           ButtonBar.ButtonData.CANCEL_CLOSE);
-        confirm.getButtonTypes().setAll(btnOui, btnNon);
+            Label icone = new Label("⚠");
+            icone.setStyle(
+                "-fx-font-size: 36px;" +
+                "-fx-text-fill: #F59E0B;");
 
-        confirm.showAndWait().ifPresent(reponse -> {
-            if (reponse == btnOui) {
+            Label titre = new Label("Confirmer la suppression");
+            titre.setStyle(
+                "-fx-font-size: 16px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #111827;");
+
+            Label message = new Label(
+                "Vous allez supprimer l'étudiant :");
+            message.setStyle(
+                "-fx-font-size: 13px;" +
+                "-fx-text-fill: #6B7280;");
+
+            Label nomEtudiant = new Label(
+                etudiant.getNom() + " " + etudiant.getPrenom());
+            nomEtudiant.setStyle(
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #111827;");
+
+            Label avertissement = new Label(
+                "Cette action est irréversible.");
+            avertissement.setStyle(
+                "-fx-font-size: 12px;" +
+                "-fx-text-fill: #DC2626;" +
+                "-fx-background-color: #FEF2F2;" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-color: #FECACA;" +
+                "-fx-border-radius: 6;" +
+                "-fx-padding: 8 12;");
+
+            Button btnAnnuler = new Button("Annuler");
+            btnAnnuler.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-text-fill: #374151;" +
+                "-fx-border-color: #D1D5DB;" +
+                "-fx-border-radius: 8;" +
+                "-fx-background-radius: 8;" +
+                "-fx-cursor: hand;" +
+                "-fx-padding: 10 24;" +
+                "-fx-font-size: 13px;");
+            btnAnnuler.setOnAction(e -> stage.close());
+
+            Button btnSupprimer = new Button("Oui, supprimer");
+            btnSupprimer.setStyle(
+                "-fx-background-color: #DC2626;" +
+                "-fx-text-fill: white;" +
+                "-fx-background-radius: 8;" +
+                "-fx-cursor: hand;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 10 24;" +
+                "-fx-font-size: 13px;");
+
+            btnSupprimer.setOnAction(e -> {
+                stage.close();
                 boolean ok = dao.delete(etudiant.getId());
                 if (ok) {
                     tousLesEtudiants.remove(etudiant);
@@ -225,14 +277,150 @@ public class EtudiantController implements Initializable {
                         "Impossible de supprimer cet étudiant.",
                         Alert.AlertType.ERROR);
                 }
-            }
-        });
+            });
+
+            btnSupprimer.setOnMouseEntered(e ->
+                btnSupprimer.setStyle(
+                    "-fx-background-color: #B91C1C;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-background-radius: 8;" +
+                    "-fx-cursor: hand;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-padding: 10 24;" +
+                    "-fx-font-size: 13px;"));
+            btnSupprimer.setOnMouseExited(e ->
+                btnSupprimer.setStyle(
+                    "-fx-background-color: #DC2626;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-background-radius: 8;" +
+                    "-fx-cursor: hand;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-padding: 10 24;" +
+                    "-fx-font-size: 13px;"));
+
+            HBox boutons = new HBox(12, btnAnnuler, btnSupprimer);
+            boutons.setAlignment(Pos.CENTER_RIGHT);
+            boutons.setStyle("-fx-padding: 8 0 0 0;");
+
+            javafx.scene.control.Separator sep =
+                new javafx.scene.control.Separator();
+            sep.setStyle("-fx-background-color: #E5E7EB;");
+
+            javafx.scene.layout.VBox layout =
+                new javafx.scene.layout.VBox(16);
+            layout.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-padding: 30;");
+            layout.setAlignment(Pos.CENTER);
+            layout.setPrefWidth(400);
+
+            javafx.scene.layout.VBox header =
+                new javafx.scene.layout.VBox(8);
+            header.setAlignment(Pos.CENTER);
+            header.setStyle(
+                "-fx-background-color: #FEF2F2;" +
+                "-fx-padding: 20;" +
+                "-fx-background-radius: 10;");
+            header.getChildren().addAll(icone, titre);
+
+            layout.getChildren().addAll(
+                header,
+                message,
+                nomEtudiant,
+                avertissement,
+                sep,
+                boutons
+            );
+
+            stage.setScene(new javafx.scene.Scene(layout));
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String titre, String msg, Alert.AlertType type) {
-        Alert a = new Alert(type);
-        a.setTitle(titre);
-        a.setContentText(msg);
-        a.showAndWait();
+        Stage owner = (Stage) tableau.getScene().getWindow();
+
+        Stage stage = new Stage();
+        stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        stage.initOwner(owner);
+        stage.setResizable(false);
+
+        String icone, couleurFond, couleurTexte, couleurBouton;
+        if (type == Alert.AlertType.INFORMATION) {
+            icone         = "✓";
+            couleurFond   = "#F0FDF4";
+            couleurTexte  = "#166534";
+            couleurBouton = "#16A34A";
+        } else if (type == Alert.AlertType.ERROR) {
+            icone         = "✕";
+            couleurFond   = "#FEF2F2";
+            couleurTexte  = "#991B1B";
+            couleurBouton = "#DC2626";
+        } else {
+            icone         = "ℹ";
+            couleurFond   = "#EFF6FF";
+            couleurTexte  = "#1E40AF";
+            couleurBouton = "#2563EB";
+        }
+
+        Label lblIcone = new Label(icone);
+        lblIcone.setStyle(
+            "-fx-font-size: 32px;" +
+            "-fx-text-fill:" + couleurTexte + ";");
+
+        Label lblTitre = new Label(titre);
+        lblTitre.setStyle(
+            "-fx-font-size: 15px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: #111827;");
+
+        Label lblMsg = new Label(msg);
+        lblMsg.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-text-fill: #6B7280;");
+        lblMsg.setWrapText(true);
+        lblMsg.setMaxWidth(300);
+        lblMsg.setAlignment(Pos.CENTER);
+
+        javafx.scene.layout.VBox header =
+            new javafx.scene.layout.VBox(8);
+        header.setAlignment(Pos.CENTER);
+        header.setMinWidth(340);
+        header.setStyle(
+            "-fx-background-color:" + couleurFond + ";" +
+            "-fx-padding: 24;" +
+            "-fx-background-radius: 10;");
+        header.getChildren().addAll(lblIcone, lblTitre);
+
+        Button btnOk = new Button("OK");
+        btnOk.setMinWidth(120);
+        btnOk.setStyle(
+            "-fx-background-color:" + couleurBouton + ";" +
+            "-fx-text-fill: white;" +
+            "-fx-background-radius: 8;" +
+            "-fx-cursor: hand;" +
+            "-fx-font-weight: bold;" +
+            "-fx-padding: 10 40;" +
+            "-fx-font-size: 13px;");
+        btnOk.setOnAction(e -> stage.close());
+
+        javafx.scene.layout.VBox layout =
+            new javafx.scene.layout.VBox(20);
+        layout.setAlignment(Pos.CENTER);
+        layout.setMinWidth(380);
+        layout.setMinHeight(220);
+        layout.setStyle(
+            "-fx-background-color: white;" +
+            "-fx-padding: 30;");
+        layout.getChildren().addAll(header, lblMsg, btnOk);
+
+        javafx.scene.Scene scene = new javafx.scene.Scene(layout);
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.centerOnScreen();
+        stage.showAndWait();
     }
 }

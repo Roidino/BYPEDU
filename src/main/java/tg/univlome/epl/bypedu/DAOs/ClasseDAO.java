@@ -28,13 +28,13 @@ public class ClasseDAO implements DAO<Classe> {
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+            while (rs.next()) {          // ← while pas if
                 liste.add(mapResultSet(rs));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return liste;
+        return liste;                    // ← retourne liste vide si erreur, jamais null
     }
 
     @Override
