@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import tg.univlome.epl.bypedu.DAOs.EtudiantDAO;
 import tg.univlome.epl.bypedu.models.Etudiant;
@@ -417,7 +418,7 @@ public class EtudiantController implements Initializable {
             "-fx-padding: 30;");
         layout.getChildren().addAll(header, lblMsg, btnOk);
 
-        javafx.scene.Scene scene = new javafx.scene.Scene(layout);
+        Scene scene = new Scene(layout);
         stage.setScene(scene);
         stage.sizeToScene();
         stage.centerOnScreen();
