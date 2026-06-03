@@ -15,23 +15,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import tg.univlome.epl.bypedu.models.Enseignant;
+import tg.univlome.epl.bypedu.models.Enseignants;
 
-public class EnseignantDAO implements DAO<Enseignant> {
+public class EnseignantsDAO implements DAO<Enseignants> {
 
     // On récupère la connexion unique via la classe de tes camarades
     private final Connection connection = DatabaseConnection.getDatabase();
 
     @Override
-    public List<Enseignant> getAll() {
-        List<Enseignant> enseignants = new ArrayList<>();
+    public List<Enseignants> getAll() {
+        List<Enseignants> enseignants = new ArrayList<>();
         String sql = "SELECT * FROM enseignants"; // Vérifie bien le nom de la table dans votre .db
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                Enseignant e = new Enseignant();
+                Enseignants e = new Enseignants();
                 e.setId(rs.getInt("id"));
                 e.setNom(rs.getString("nom"));
                 e.setMatiere(rs.getString("matiere"));
@@ -48,13 +48,13 @@ public class EnseignantDAO implements DAO<Enseignant> {
     }
 
     @Override
-    public Enseignant getById(int id) {
+    public Enseignants getById(int id) {
         // On le fera si besoin plus tard
         return null;
     }
 
     @Override
-    public boolean ajoute(Enseignant e) {
+    public boolean ajoute(Enseignants e) {
         String sql = "INSERT INTO enseignants (nom, matiere, classe, email, telephone) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, e.getNom());
@@ -72,7 +72,7 @@ public class EnseignantDAO implements DAO<Enseignant> {
     }
 
     @Override
-    public boolean update(Enseignant e) {
+    public boolean update(Enseignants e) {
         // On codera ça à l'étape de modification
         return false;
     }

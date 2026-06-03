@@ -15,7 +15,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import tg.univlome.epl.bypedu.DAOs.CoursDAO;
-import tg.univlome.epl.bypedu.Models.Cours;
+import tg.univlome.epl.bypedu.models.Cours;
 
 import java.net.URL;
 import java.util.List;

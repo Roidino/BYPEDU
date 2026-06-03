@@ -25,7 +25,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException{
         BorderPane root = FXMLLoader.load(getClass().getResource("accueil.fxml"));
-        scene = new Scene(root, 720, 480);
+        scene = new Scene(root, 900, 480);
         stage.setScene(scene);
         stage.show();
     }

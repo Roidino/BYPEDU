@@ -10,7 +10,7 @@ package tg.univlome.epl.bypedu.models;
  * @author Honoré
  */
 
-public class Enseignant {
+public class Enseignants {
     // 1. Les attributs (qui correspondent aux colonnes de ta base de données)
     private int id;
     private String nom;
@@ -20,12 +20,19 @@ public class Enseignant {
     private String telephone;
 
     // 2. Le constructeur vide (obligatoire pour beaucoup de frameworks et DAOs)
-    public Enseignant() {
+    public Enseignants() {
     }
 
     // 3. Le constructeur complet (pratique pour créer un enseignant rapidement)
-    public Enseignant(int id, String nom, String matiere, String classe, String email, String telephone) {
+    public Enseignants(int id, String nom, String matiere, String classe, String email, String telephone) {
         this.id = id;
+        this.nom = nom;
+        this.matiere = matiere;
+        this.classe = classe;
+        this.email = email;
+        this.telephone = telephone;
+    }
+        public Enseignants(String nom, String matiere, String classe, String email, String telephone) {
         this.nom = nom;
         this.matiere = matiere;
         this.classe = classe;
