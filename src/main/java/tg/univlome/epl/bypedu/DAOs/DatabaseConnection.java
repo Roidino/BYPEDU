@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -13,22 +14,21 @@ import java.sql.SQLException;
  *
  * @author Savastano
  */
+
 public class DatabaseConnection {
-    private static final String URL = "jdbc:sqlite:src/main/resources/tg/univlome/epl/bypedu/database.db";
-    private static Connection connection;
-            
-    private DatabaseConnection(){
-        
-    }
-    
-    public static Connection getDatabase(){
-        if (connection == null) {
+    private static Connection instance = null;
+
+    public static Connection getDatabase() {
+        if (instance == null) {
             try {
-                connection =  DriverManager.getConnection(URL);
+                instance = DriverManager.getConnection("jdbc:sqlite:src/main/resources/tg/univlome/epl/bypedu/database.db");
+                instance.createStatement()
+                        .execute("PRAGMA foreign_keys = ON");
+                // ↑ une seule connexion réutilisée partout
             } catch (SQLException ex) {
-                System.getLogger(DatabaseConnection.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                ex.printStackTrace();
             }
         }
-        return connection;
+        return instance;
     }
 }

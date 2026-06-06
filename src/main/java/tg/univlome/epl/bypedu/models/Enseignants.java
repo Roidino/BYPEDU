@@ -14,6 +14,7 @@ public class Enseignants {
     // 1. Les attributs (qui correspondent aux colonnes de ta base de données)
     private int id;
     private String nom;
+    private String prenom;
     private String matiere;
     private String classe;
     private String email;
@@ -24,16 +25,10 @@ public class Enseignants {
     }
 
     // 3. Le constructeur complet (pratique pour créer un enseignant rapidement)
-    public Enseignants(int id, String nom, String matiere, String classe, String email, String telephone) {
+    public Enseignants(int id, String nom,  String prenom, String matiere, String classe, String email, String telephone) {
         this.id = id;
         this.nom = nom;
-        this.matiere = matiere;
-        this.classe = classe;
-        this.email = email;
-        this.telephone = telephone;
-    }
-        public Enseignants(String nom, String matiere, String classe, String email, String telephone) {
-        this.nom = nom;
+        this.prenom = prenom;
         this.matiere = matiere;
         this.classe = classe;
         this.email = email;
@@ -55,6 +50,13 @@ public class Enseignants {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
     public String getMatiere() {
