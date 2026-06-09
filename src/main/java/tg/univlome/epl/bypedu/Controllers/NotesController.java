@@ -11,7 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import tg.univlome.epl.bypedu.DAOs.NotesDAO;
-import tg.univlome.epl.bypedu.Models.Notes;
+import tg.univlome.epl.bypedu.models.Notes;
 
 import java.io.*;
 import java.net.URL;

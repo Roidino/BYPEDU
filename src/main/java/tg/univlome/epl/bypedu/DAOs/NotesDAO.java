@@ -1,6 +1,6 @@
 package tg.univlome.epl.bypedu.DAOs;
 
-import tg.univlome.epl.bypedu.Models.Notes;
+import tg.univlome.epl.bypedu.models.Notes;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package tg.univlome.epl.bypedu.Models;
+package tg.univlome.epl.bypedu.models;
 
 import java.util.HashMap;
 import java.util.Map;
