@@ -43,7 +43,7 @@ public class EnseignantsController implements Initializable {
     @FXML
     private TableColumn<Enseignants, String> colNom;
     @FXML
-    private TableColumn<Enseignants, String> colPrenom; // Ajouté pour séparer le prénom
+    private TableColumn<Enseignants, String> colPrenom;
     @FXML
     private TableColumn<Enseignants, String> colMatiere;
     @FXML
@@ -55,16 +55,12 @@ public class EnseignantsController implements Initializable {
     @FXML
     private TableColumn<Enseignants, Void> colActions;
 
-    // 1. La liste source (Master Data)
     private final ObservableList<Enseignants> listeEnseignants = FXCollections.observableArrayList();
     private final EnseignantsDAO enseignantsDAO = new EnseignantsDAO();
-
-    // 2. La liste filtrée qui va envelopper la liste source
     private FilteredList<Enseignants> donneesFiltrees;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // 1. Configuration des colonnes (Nom et Prénom séparés)
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colPrenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         colMatiere.setCellValueFactory(new PropertyValueFactory<>("matiere"));
@@ -72,44 +68,30 @@ public class EnseignantsController implements Initializable {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colTelephone.setCellValueFactory(new PropertyValueFactory<>("telephone"));
 
-        // 2. Remplir la ComboBox dynamiquement depuis la BDD (Connexion sécurisée)
         chargerMatieresDepuisBDD();
 
-        // 3. Initialisation indispensable de la liste filtrée
         donneesFiltrees = new FilteredList<>(listeEnseignants, p -> true);
 
-        // 4. Écouter les changements dans le champ de recherche de texte
         txtRechercher.textProperty().addListener((observable, oldValue, newValue) -> {
             appliquerFiltre(newValue, comboMatieres.getValue());
         });
 
-        // 5. Écouter les changements de sélection dans la ComboBox
         comboMatieres.valueProperty().addListener((observable, oldValue, newValue) -> {
             appliquerFiltre(txtRechercher.getText(), newValue);
         });
 
-        // 6. Préparer le pipeline de tri
         SortedList<Enseignants> donneesTriees = new SortedList<>(donneesFiltrees);
         donneesTriees.comparatorProperty().bind(tableEnseignants.comparatorProperty());
         
-        // 7. Lier le tableau aux données triées et filtrées
         tableEnseignants.setItems(donneesTriees);
         tableEnseignants.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // 8. Ajouter les boutons d'action (Modifier / Supprimer)
         ajouterBoutonsActions();
-
-        // 9. Charger les lignes de données depuis SQLite en tout dernier
         chargerDonneesDepuisBDD(); 
     }
 
-    /**
-     * Centralise la logique de filtrage combinée (Texte + ComboBox)
-     */
     private void appliquerFiltre(String texteRecherche, String matiereSelectionnee) {
         donneesFiltrees.setPredicate(enseignant -> {
-
-            // Étape A : Filtrage par texte (Nom, Prénom ou Email)
             boolean correspondTexte = true;
             if (texteRecherche != null && !texteRecherche.isEmpty()) {
                 String minuscules = texteRecherche.toLowerCase();
@@ -118,82 +100,87 @@ public class EnseignantsController implements Initializable {
                         || (enseignant.getEmail() != null && enseignant.getEmail().toLowerCase().contains(minuscules));
             }
 
-            // Étape B : Filtrage par matière (ComboBox)
             boolean correspondMatiere = true;
             if (matiereSelectionnee != null && !matiereSelectionnee.equals("Toutes")) {
                 correspondMatiere = matiereSelectionnee.equals(enseignant.getMatiere());
             }
 
-            // L'enseignant est affiché uniquement s'il valide les deux critères
             return correspondTexte && correspondMatiere;
         });
     }
 
-    /**
-     * Ajoute dynamiquement les boutons Modifier et Supprimer dans la colonne Actions
-     */
     private void ajouterBoutonsActions() {
         Callback<TableColumn<Enseignants, Void>, TableCell<Enseignants, Void>> cellFactory = (param) -> {
             return new TableCell<Enseignants, Void>() {
-                @Override
-                protected void updateItem(Void item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                    } else {
-                        Button btnEdit = new Button("Modifier");
-                        btnEdit.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;");
+                
+                private final Button btnEdit = new Button("Modifier");
+                private final Button btnDelete = new Button("Supprimer");
+                private final HBox managebtn = new HBox(btnEdit, btnDelete);
 
-                        Button btnDelete = new Button("Supprimer");
-                        btnDelete.setStyle("-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;");
+                {
+                    btnEdit.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;");
+                    btnDelete.setStyle("-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;");
+                    
+                    managebtn.setStyle("-fx-alignment: center;");
+                    managebtn.setSpacing(10);
 
-                        // Action : MODIFIER
-                        btnEdit.setOnAction(event -> {
-                            Enseignants e = getTableView().getItems().get(getIndex());
-                            Optional<Enseignants> resultat = afficherFormulaireEnseignant(e);
-                            
+                    // Action : MODIFIER
+                    btnEdit.setOnAction(event -> {
+                        Enseignants e = getTableRow().getItem();
+                        if (e != null) {
+                            // Clonage pour éviter les modifications live parasites
+                            Enseignants copieEnseignant = new Enseignants();
+                            copieEnseignant.setId(e.getId());
+                            copieEnseignant.setNom(e.getNom());
+                            copieEnseignant.setPrenom(e.getPrenom());
+                            copieEnseignant.setEmail(e.getEmail());
+                            copieEnseignant.setTelephone(e.getTelephone());
+                            copieEnseignant.setMatiere(e.getMatiere());
+                            copieEnseignant.setClasse(e.getClasse());
+
+                            Optional<Enseignants> resultat = afficherFormulaireEnseignant(copieEnseignant);
                             resultat.ifPresent(enseignantModifie -> {
                                 boolean misAJour = enseignantsDAO.update(enseignantModifie);
                                 if (misAJour) {
-                                    chargerDonneesDepuisBDD();
+                                    chargerDonneesDepuisBDD(); 
                                     System.out.println("Enseignant mis à jour : " + enseignantModifie.getNom());
                                 } else {
-                                    Alert errorAlert = new Alert(AlertType.ERROR, "Impossible de modifier cet enseignant en BDD.", ButtonType.OK);
+                                    Alert errorAlert = new Alert(AlertType.ERROR, "Impossible de modifier cet enseignant.", ButtonType.OK);
                                     errorAlert.showAndWait();
                                 }
                             });
-                        });
+                        }
+                    });
 
-                        // Action : SUPPRIMER
-                        btnDelete.setOnAction(event -> {
-                            Enseignants e = getTableView().getItems().get(getIndex());
-                            
-                            Alert alert = new Alert(AlertType.CONFIRMATION);
-                            alert.setTitle("Confirmation de suppression");
-                            alert.setHeaderText("Supprimer l'enseignant : " + e.getNom() + " " + e.getPrenom() + " ?");
-                            alert.setContentText("Cette action supprimera également ses affectations de classes. Continuer ?");
+                    // Action : SUPPRIMER
+                    btnDelete.setOnAction(event -> {
+                        Enseignants e = getTableRow().getItem();
+                        if (e == null) return; 
+                        
+                        Alert alert = new Alert(AlertType.CONFIRMATION);
+                        alert.setTitle("Confirmation de suppression");
+                        alert.setHeaderText("Retirer l'affectation de classe ?");
+                        alert.setContentText("Voulez-vous retirer " + e.getNom().toUpperCase() + " " + e.getPrenom() + " de la classe " + e.getClasse() + " ?");
 
-                            Optional<ButtonType> result = alert.showAndWait();
-                            
-                            if (result.isPresent() && result.get() == ButtonType.OK) {
-                                boolean confirmationSuppression = enseignantsDAO.delete(e.getId());
-                                
-                                if (confirmationSuppression) {
-                                    listeEnseignants.remove(e);
-                                    System.out.println("Enseignant supprimé : " + e.getNom());
-                                } else {
-                                    Alert errorAlert = new Alert(AlertType.ERROR);
-                                    errorAlert.setTitle("Erreur");
-                                    errorAlert.setHeaderText("Erreur de suppression");
-                                    errorAlert.setContentText("Impossible de supprimer cet enseignant. Vérifiez les contraintes de la base de données.");
-                                    errorAlert.showAndWait();
-                                }
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            boolean confirmationSuppression = enseignantsDAO.deleteAffectation(e.getId(), e.getClasse());
+                            if (confirmationSuppression) {
+                                chargerDonneesDepuisBDD(); 
+                            } else {
+                                Alert errorAlert = new Alert(AlertType.ERROR, "Impossible de supprimer cette affectation.", ButtonType.OK);
+                                errorAlert.showAndWait();
                             }
-                        });
+                        }
+                    });
+                }
 
-                        HBox managebtn = new HBox(btnEdit, btnDelete);
-                        managebtn.setStyle("-fx-alignment: center;");
-                        managebtn.setSpacing(10);
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                        setGraphic(null);
+                    } else {
                         setGraphic(managebtn);
                     }
                     setText(null);
@@ -203,118 +190,99 @@ public class EnseignantsController implements Initializable {
         colActions.setCellFactory(cellFactory);
     }
 
-    /**
-     * Génère un formulaire dialog dynamique sans FXML (Nom, Prénom et Matière gérés proprement)
-     */
-private Optional<Enseignants> afficherFormulaireEnseignant(Enseignants enseignantAModifier) {
-    boolean estModification = (enseignantAModifier != null);
-    
-    Dialog<Enseignants> dialog = new Dialog<>();
-    dialog.setTitle(estModification ? "Modifier l'enseignant" : "Ajouter un enseignant");
+    private Optional<Enseignants> afficherFormulaireEnseignant(Enseignants enseignantAModifier) {
+        boolean estModification = (enseignantAModifier != null);
+        
+        Dialog<Enseignants> dialog = new Dialog<>();
+        dialog.setTitle(estModification ? "Modifier l'enseignant" : "Ajouter une affectation");
 
-    ButtonType boutonTypeSauvegarder = new ButtonType("Sauvegarder", ButtonBar.ButtonData.OK_DONE);
-    dialog.getDialogPane().getButtonTypes().addAll(boutonTypeSauvegarder, ButtonType.CANCEL);
+        ButtonType boutonTypeSauvegarder = new ButtonType("Sauvegarder", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(boutonTypeSauvegarder, ButtonType.CANCEL);
 
-    GridPane grid = new GridPane();
-    grid.setHgap(10);
-    grid.setVgap(10);
-    grid.setStyle("-fx-padding: 20;");
+        GridPane grid = new GridPane();
+        grid.setHgap(10); grid.setVgap(10);
+        grid.setStyle("-fx-padding: 20;");
 
-    TextField txtNom = new TextField();
-    TextField txtPrenom = new TextField();
-    TextField txtEmail = new TextField();
-    TextField txtTelephone = new TextField();
-    
-    // 1. ComboBox pour la Matière
-    ComboBox<String> comboMatiereForm = new ComboBox<>();
-    ObservableList<String> matieresForm = FXCollections.observableArrayList(comboMatieres.getItems());
-    matieresForm.remove("Toutes");
-    comboMatiereForm.setItems(matieresForm);
+        TextField txtNom = new TextField();
+        TextField txtPrenom = new TextField();
+        TextField txtEmail = new TextField();
+        TextField txtTelephone = new TextField();
+        
+        ComboBox<String> comboMatiereForm = new ComboBox<>();
+        ObservableList<String> matieresForm = FXCollections.observableArrayList(comboMatieres.getItems());
+        matieresForm.remove("Toutes");
+        comboMatiereForm.setItems(matieresForm);
 
-    // 2. ComboBox pour la Classe (Nouveau !)
-    ComboBox<String> comboClasseForm = new ComboBox<>();
-    comboClasseForm.setItems(obtenirListeClassesBDD()); // Charge les classes de la BDD
+        ComboBox<String> comboClasseForm = new ComboBox<>();
+        comboClasseForm.setItems(obtenirListeClassesBDD());
 
-    // Réalignement de la grille (6 lignes au total)
-    grid.add(new Label("Nom :"), 0, 0);
-    grid.add(txtNom, 1, 0);
-    grid.add(new Label("Prénom :"), 0, 1);
-    grid.add(txtPrenom, 1, 1);
-    grid.add(new Label("Matière assignée :"), 0, 2);
-    grid.add(comboMatiereForm, 1, 2);
-    grid.add(new Label("Classe assignée :"), 0, 3); // Ajouté ici
-    grid.add(comboClasseForm, 1, 3);
-    grid.add(new Label("Email :"), 0, 4);
-    grid.add(txtEmail, 1, 4);
-    grid.add(new Label("Téléphone :"), 0, 5);
-    grid.add(txtTelephone, 1, 5);
+        grid.add(new Label("Nom :"), 0, 0); grid.add(txtNom, 1, 0);
+        grid.add(new Label("Prénom :"), 0, 1); grid.add(txtPrenom, 1, 1);
+        grid.add(new Label("Matière assignée :"), 0, 2); grid.add(comboMatiereForm, 1, 2);
+        grid.add(new Label("Classe assignée :"), 0, 3); grid.add(comboClasseForm, 1, 3);
+        grid.add(new Label("Email :"), 0, 4); grid.add(txtEmail, 1, 4);
+        grid.add(new Label("Téléphone :"), 0, 5); grid.add(txtTelephone, 1, 5);
 
-    // Remplissage en mode modification
-    if (estModification) {
-        txtNom.setText(enseignantAModifier.getNom()); 
-        txtPrenom.setText(enseignantAModifier.getPrenom()); 
-        txtEmail.setText(enseignantAModifier.getEmail());
-        txtTelephone.setText(enseignantAModifier.getTelephone());
-        comboMatiereForm.setValue(enseignantAModifier.getMatiere());
-        comboClasseForm.setValue(enseignantAModifier.getClasse()); // Sélectionne sa classe actuelle
-    }
-
-    dialog.getDialogPane().setContent(grid);
-
-    dialog.setResultConverter(dialogButton -> {
-        if (dialogButton == boutonTypeSauvegarder) {
-            Enseignants e = estModification ? enseignantAModifier : new Enseignants();
-            e.setNom(txtNom.getText());
-            e.setPrenom(txtPrenom.getText());
-            e.setMatiere(comboMatiereForm.getValue());
-            e.setClasse(comboClasseForm.getValue()); // Récupération de la classe
-            e.setEmail(txtEmail.getText());
-            e.setTelephone(txtTelephone.getText());
-            return e;
+        if (estModification) {
+            txtNom.setText(enseignantAModifier.getNom()); 
+            txtPrenom.setText(enseignantAModifier.getPrenom()); 
+            txtEmail.setText(enseignantAModifier.getEmail());
+            txtTelephone.setText(enseignantAModifier.getTelephone());
+            comboMatiereForm.setValue(enseignantAModifier.getMatiere());
+            comboClasseForm.setValue(enseignantAModifier.getClasse());
+            comboClasseForm.setDisable(true); 
         }
-        return null;
-    });
 
-    return dialog.showAndWait();
-}
+        dialog.getDialogPane().setContent(grid);
 
-/**
- * Petite méthode utilitaire pour charger les classes disponibles dans le formulaire
- */
-private ObservableList<String> obtenirListeClassesBDD() {
-    ObservableList<String> liste = FXCollections.observableArrayList();
-    String sql = "SELECT nom FROM classes ORDER BY nom ASC";
-    java.sql.Connection conn = tg.univlome.epl.bypedu.DAOs.DatabaseConnection.getDatabase();
-    if (conn != null) {
-        try (PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-            while (rs.next()) {
-                liste.add(rs.getString("nom"));
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == boutonTypeSauvegarder) {
+                Enseignants e = estModification ? enseignantAModifier : new Enseignants();
+                e.setNom(txtNom.getText());
+                e.setPrenom(txtPrenom.getText());
+                e.setMatiere(comboMatiereForm.getValue());
+                e.setClasse(comboClasseForm.getValue()); 
+                e.setEmail(txtEmail.getText());
+                e.setTelephone(txtTelephone.getText());
+                return e;
             }
-        } catch (SQLException ex) {
-            System.err.println("Erreur chargement classes formulaire : " + ex.getMessage());
-        }
+            return null;
+        });
+
+        return dialog.showAndWait();
     }
-    return liste;
-}
+
+    private ObservableList<String> obtenirListeClassesBDD() {
+        ObservableList<String> liste = FXCollections.observableArrayList();
+        String sql = "SELECT nom FROM classes ORDER BY nom ASC";
+        java.sql.Connection conn = tg.univlome.epl.bypedu.DAOs.DatabaseConnection.getDatabase();
+        if (conn != null) {
+            try (PreparedStatement pstmt = conn.prepareStatement(sql);
+                 ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    liste.add(rs.getString("nom"));
+                }
+            } catch (SQLException ex) {
+                System.err.println("Erreur chargement classes : " + ex.getMessage());
+            }
+        }
+        return liste;
+    }
 
     private void chargerDonneesDepuisBDD() {
         listeEnseignants.clear();
         listeEnseignants.addAll(enseignantsDAO.getAll());
-        System.out.println("Données chargées via EnseignantsDAO !");
     }
 
     @FXML
     private void AjouterEnseignant(ActionEvent event) {
         Optional<Enseignants> resultat = afficherFormulaireEnseignant(null);
-        
         resultat.ifPresent(nouvelEnseignant -> {
             boolean insere = enseignantsDAO.ajoute(nouvelEnseignant); 
             if (insere) {
                 chargerDonneesDepuisBDD(); 
-                System.out.println("Nouvel enseignant ajouté avec succès !");
             } else {
-                Alert errorAlert = new Alert(AlertType.ERROR, "Erreur lors de l'insertion en base de données.", ButtonType.OK);
+                Alert errorAlert = new Alert(AlertType.ERROR, "Erreur lors de l'affectation (L'enseignant fait déjà cours dans cette classe).", ButtonType.OK);
                 errorAlert.showAndWait();
             }
         });
@@ -331,25 +299,17 @@ private ObservableList<String> obtenirListeClassesBDD() {
 
         String sql = "SELECT nom FROM matieres ORDER BY nom ASC";
         java.sql.Connection conn = tg.univlome.epl.bypedu.DAOs.DatabaseConnection.getDatabase();
-        
-        if (conn == null) {
-            System.err.println("Échec d'accès à DatabaseConnection !");
-            return;
-        }
+        if (conn == null) return;
 
-        // try-with-resources appliqué uniquement sur Statement et ResultSet pour laisser le Singleton ouvert
         try (java.sql.PreparedStatement pstmt = conn.prepareStatement(sql);
              java.sql.ResultSet rs = pstmt.executeQuery()) {
-
             while (rs.next()) {
                 optionsMatieres.add(rs.getString("nom"));
             }
             comboMatieres.setItems(optionsMatieres);
             comboMatieres.setValue("Toutes");
-            System.out.println("Matières chargées dynamiquement depuis SQLite !");
-
         } catch (java.sql.SQLException ex) {
-            System.err.println("Erreur lors du chargement des matières : " + ex.getMessage());
+            System.err.println("Erreur chargement matières : " + ex.getMessage());
         }
     }
 }
