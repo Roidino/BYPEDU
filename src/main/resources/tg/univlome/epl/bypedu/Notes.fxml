@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane stylesheets="@styles/accueil.css"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tg.univlome.epl.bypedu.Controllers.NotesController">
+    <left>
+        <fx:include source="sidebar.fxml" fx:id="sidebar"/>
+    </left>
+    <center>
+        <BorderPane style="-fx-background-color: #f4f6fb;">
+            <top>
+                <!-- En-tête : titre + ComboBox trimestre + bouton Exporter PDF -->
+                <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 30 40 15 40;">
+                    <Label text="Gestion des Notes"
+                           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="cbTrimestre"
+                              promptText="Trimestre"
+                              style="-fx-background-color: white; -fx-background-radius: 8;
+                                     -fx-border-color: #e2e8f0; -fx-border-radius: 8;
+                                     -fx-font-size: 14px; -fx-padding: 4; -fx-cursor: hand;"/>
+                    <Button fx:id="btnExporterPdf"
+                            text="⬇  Exporter PDF"
+                            onAction="#exporterPdf"
+                            style="-fx-background-color: #16a34a; -fx-text-fill: white;
+                                   -fx-font-size: 14px; -fx-font-weight: bold;
+                                   -fx-background-radius: 8; -fx-padding: 10 18 10 18;
+                                   -fx-cursor: hand;"/>
+                </HBox>
+            </top>
+            <center>
+                <ScrollPane fitToWidth="true"
+                            style="-fx-background-color: #f4f6fb; -fx-background: #f4f6fb;">
+                    <VBox spacing="25" style="-fx-padding: 0 40 30 40;">
+
+                        <!-- Barre de filtres : recherche + filtre classe -->
+                        <HBox spacing="15" alignment="CENTER_LEFT"
+                              style="-fx-background-color: white; -fx-padding: 20;
+                                     -fx-background-radius: 12;
+                                     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 5);">
+                            <TextField fx:id="txtRecherche"
+                                       promptText="🔍 Rechercher un étudiant..."
+                                       HBox.hgrow="ALWAYS"
+                                       style="-fx-padding: 12 15 12 15;
+                                              -fx-background-color: #f8fafc;
+                                              -fx-background-radius: 8;
+                                              -fx-border-color: #e2e8f0; -fx-border-radius: 8;
+                                              -fx-font-size: 14px;"/>
+                            <ComboBox fx:id="cbClasse"
+                                      promptText="Toutes les classes"
+                                      prefWidth="220"
+                                      style="-fx-background-color: white; -fx-background-radius: 8;
+                                             -fx-border-color: #e2e8f0; -fx-border-radius: 8;
+                                             -fx-padding: 8; -fx-font-size: 14px; -fx-cursor: hand;"/>
+                        </HBox>
+
+                        <!-- Tableau des notes (colonnes générées dynamiquement) -->
+                        <TableView fx:id="tableNotes"
+                                   style="-fx-background-color: white; -fx-background-radius: 12;
+                                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 5);"
+                                   prefHeight="360"
+                                   VBox.vgrow="ALWAYS">
+                            <placeholder>
+                                <Label text="Aucune note disponible pour cette sélection."
+                                       style="-fx-text-fill: #94a3b8; -fx-font-size: 14px;"/>
+                            </placeholder>
+                        </TableView>
+
+                        <!-- Cartes statistiques en bas -->
+                        <GridPane hgap="20" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="33.3"/>
+                                <ColumnConstraints percentWidth="33.4"/>
+                                <ColumnConstraints percentWidth="33.3"/>
+                            </columnConstraints>
+
+                            <!-- Carte verte : Meilleure Moyenne -->
+                            <VBox spacing="8" GridPane.columnIndex="0"
+                                  style="-fx-background-color: #10b981; -fx-padding: 25;
+                                         -fx-background-radius: 14;">
+                                <Label text="Meilleure Moyenne"
+                                       style="-fx-text-fill: #e6fdf5; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+                                <Label fx:id="lblBestMoyenne" text="--/20"
+                                       style="-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;"/>
+                                <Label fx:id="lblBestEtudiant" text="Aucun enregistrement"
+                                       style="-fx-text-fill: #e6fdf5; -fx-font-size: 13px;"/>
+                            </VBox>
+
+                            <!-- Carte bleue : Moyenne de Classe -->
+                            <VBox spacing="8" GridPane.columnIndex="1"
+                                  style="-fx-background-color: #2563eb; -fx-padding: 25;
+                                         -fx-background-radius: 14;">
+                                <Label text="Moyenne de Classe"
+                                       style="-fx-text-fill: #eff6ff; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+                                <Label fx:id="lblMoyenneClasse" text="--/20"
+                                       style="-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;"/>
+                                <Label text="Toutes classes confondues"
+                                       style="-fx-text-fill: #eff6ff; -fx-font-size: 13px;"/>
+                            </VBox>
+
+                            <!-- Carte violette : Taux de Réussite -->
+                            <VBox spacing="8" GridPane.columnIndex="2"
+                                  style="-fx-background-color: #a855f7; -fx-padding: 25;
+                                         -fx-background-radius: 14;">
+                                <Label text="Taux de Réussite"
+                                       style="-fx-text-fill: #faf5ff; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+                                <Label fx:id="lblTauxReussite" text="--%"
+                                       style="-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;"/>
+                                <Label text="Étudiants avec moyenne ≥ 10"
+                                       style="-fx-text-fill: #faf5ff; -fx-font-size: 13px;"/>
+                            </VBox>
+                        </GridPane>
+
+                    </VBox>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>
