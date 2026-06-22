@@ -1,0 +1,90 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 27 mai 2026, 10:57:08
+    Author     : Honoré
+*/
+
+/* --- Styles pour la zone de contenu (Enseignants) --- */
+
+/* Titre principal */
+.main-title {
+    -fx-text-fill: #2C3E50;
+}
+
+/* Bouton Ajouter (Vert / Succès) */
+.btn-primary {
+    -fx-background-color: #2ECC71;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.btn-primary:hover {
+    -fx-background-color: #27AE60;
+}
+
+/* Bouton Rechercher (Bleu) */
+.btn-secondary {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover {
+    -fx-background-color: #2980B9;
+}
+
+/* Inputs & ComboBox */
+.form-input {
+    -fx-background-radius: 4;
+    -fx-border-color: #BDC3C7;
+    -fx-border-radius: 4;
+    -fx-background-color: #FFFFFF;
+}
+.form-input:focused {
+    -fx-border-color: #3498DB;
+    -fx-border-width: 1.5;
+}
+
+/* --- TableView au look épuré --- */
+.modern-table {
+    -fx-background-color: transparent;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 6;
+}
+.modern-table .column-header-background {
+    -fx-background-color: #F8FAFC;
+}
+.modern-table .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-weight: bold;
+    -fx-padding: 8;
+}
+.modern-table .table-row-cell:even {
+    -fx-background-color: #F8FAFC;
+}
+.modern-table .table-row-cell:selected {
+    -fx-background-color: #CBD5E1;
+    -fx-text-fill: #0F172A;
+}
+.edit-icon {
+    -fx-icon-color: #2196f3; /* Bleu */
+    -fx-cursor: hand;
+}
+
+.edit-icon:hover {
+    -fx-icon-color: #1976d2;
+}
+
+.delete-icon {
+    -fx-icon-color: #f44336; /* Rouge */
+    -fx-cursor: hand;
+}
+
+.delete-icon:hover {
+    -fx-icon-color: #d32f2f;
+}

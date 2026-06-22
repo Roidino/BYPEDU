@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tg.univlome.epl.bypedu.Controllers.FormulaireEtudiantController"
+      spacing="0" prefWidth="480"
+      style="-fx-background-color: white;">
+
+    <VBox style="-fx-background-color: #1E3A6E;
+                 -fx-padding: 24 30 24 30;
+                 -fx-background-radius: 12 12 0 0;">
+        <Label fx:id="titreFormulaire" text="Ajouter un étudiant"
+               style="-fx-font-size: 18px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: white;"/>
+        <Label text="Remplissez les informations de l'étudiant"
+               style="-fx-font-size: 12px;
+                      -fx-text-fill: #93C5FD;
+                      -fx-padding: 4 0 0 0;"/>
+    </VBox>
+
+    <VBox spacing="20"
+          style="-fx-padding: 30 30 20 30;">
+        <GridPane hgap="20" vgap="16">
+            <VBox GridPane.rowIndex="0" GridPane.columnIndex="0"
+                  GridPane.columnSpan="2" spacing="6">
+                <Label text="Nom *"
+                       style="-fx-font-size: 12px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #374151;"/>
+                <TextField fx:id="champNom"
+                           promptText="Ex: Durand"
+                           style="-fx-background-color: #F9FAFB;
+                                  -fx-border-color: #D1D5DB;
+                                  -fx-border-radius: 8;
+                                  -fx-background-radius: 8;
+                                  -fx-padding: 10 14;
+                                  -fx-font-size: 13px;
+                                  -fx-pref-width: 400;"/>
+            </VBox>
+
+            <!-- Prénom -->
+            <VBox GridPane.rowIndex="1" GridPane.columnIndex="0"
+                  GridPane.columnSpan="2" spacing="6">
+                <Label text="Prénom *"
+                       style="-fx-font-size: 12px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #374151;"/>
+                <TextField fx:id="champPrenom"
+                           promptText="Ex: Alexandre"
+                           style="-fx-background-color: #F9FAFB;
+                                  -fx-border-color: #D1D5DB;
+                                  -fx-border-radius: 8;
+                                  -fx-background-radius: 8;
+                                  -fx-padding: 10 14;
+                                  -fx-font-size: 13px;
+                                  -fx-pref-width: 400;"/>
+            </VBox>
+            <VBox GridPane.rowIndex="2" GridPane.columnIndex="0" spacing="6">
+                <Label text="Date de naissance *"
+                       style="-fx-font-size: 12px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #374151;"/>
+                <DatePicker fx:id="champDateNaissance"
+                            style="-fx-background-color: #F9FAFB;
+                                   -fx-border-color: #D1D5DB;
+                                   -fx-border-radius: 8;
+                                   -fx-background-radius: 8;
+                                   -fx-pref-width: 190;"/>
+            </VBox>
+            <VBox GridPane.rowIndex="2" GridPane.columnIndex="1" spacing="6">
+                <Label text="Téléphone"
+                       style="-fx-font-size: 12px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #374151;"/>
+                <TextField fx:id="champTelephone"
+                           promptText="Ex: 90 00 00 00"
+                           style="-fx-background-color: #F9FAFB;
+                                  -fx-border-color: #D1D5DB;
+                                  -fx-border-radius: 8;
+                                  -fx-background-radius: 8;
+                                  -fx-padding: 10 14;
+                                  -fx-font-size: 13px;
+                                  -fx-pref-width: 190;"/>
+            </VBox>
+            <VBox GridPane.rowIndex="3" GridPane.columnIndex="0" spacing="6">
+                <Label text="Classe *"
+                       style="-fx-font-size: 12px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #374151;"/>
+                <ComboBox fx:id="champClasse"
+                          promptText="Choisir une classe"
+                          style="-fx-background-color: #F9FAFB;
+                                 -fx-border-color: #D1D5DB;
+                                 -fx-border-radius: 8;
+                                 -fx-background-radius: 8;
+                                 -fx-pref-width: 190;"/>
+            </VBox>
+            <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" spacing="6">
+                <Label text="Statut"
+                       style="-fx-font-size: 12px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #374151;"/>
+                <ComboBox fx:id="champStatut"
+                          style="-fx-background-color: #F9FAFB;
+                                 -fx-border-color: #D1D5DB;
+                                 -fx-border-radius: 8;
+                                 -fx-background-radius: 8;
+                                 -fx-pref-width: 190;"/>
+            </VBox>
+
+        </GridPane>
+        <HBox visible="false" fx:id="errorMessage" style="-fx-background-color: #FEF2F2;
+                     -fx-border-color: #FECACA;
+                     -fx-border-radius: 6;
+                     -fx-background-radius: 6;
+                     -fx-padding: 8 12;">
+            <Label fx:id="messageErreur" text=""
+                   style="-fx-text-fill: #DC2626;
+                          -fx-font-size: 12px;"/>
+        </HBox>
+
+    </VBox>
+    <Separator style="-fx-background-color: #E5E7EB;"/>
+    <HBox spacing="12" alignment="CENTER_RIGHT"
+          style="-fx-padding: 16 30 20 30;
+                 -fx-background-color: #F9FAFB;
+                 -fx-background-radius: 0 0 12 12;">
+
+        <Button text="Annuler" onAction="#annuler"
+                style="-fx-background-color: white;
+                       -fx-text-fill: #374151;
+                       -fx-border-color: #D1D5DB;
+                       -fx-border-radius: 8;
+                       -fx-background-radius: 8;
+                       -fx-cursor: hand;
+                       -fx-padding: 10 24;
+                       -fx-font-size: 13px;"/>
+
+        <Button fx:id="btnSauvegarder" text="Sauvegarder" onAction="#sauvegarder"
+                style="-fx-background-color: #2563EB;
+                       -fx-text-fill: white;
+                       -fx-background-radius: 8;
+                       -fx-cursor: hand;
+                       -fx-font-weight: bold;
+                       -fx-padding: 10 24;
+                       -fx-font-size: 13px;"/>
+    </HBox>
+
+</VBox>

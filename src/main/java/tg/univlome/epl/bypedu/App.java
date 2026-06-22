@@ -1,3 +1,4 @@
+
 package tg.univlome.epl.bypedu;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException{
         BorderPane root = FXMLLoader.load(getClass().getResource("accueil.fxml"));
-        scene = new Scene(root, 720, 480);
+        scene = new Scene(root, 980, 620);
         stage.setScene(scene);
         stage.show();
     }
@@ -36,6 +37,7 @@ public class App extends Application {
             root = FXMLLoader.load(App.class.getResource(fxml + ".fxml"));
         } catch (IOException ex) {
             System.out.println("Erreur de chargement de " + fxml);
+            return;
         }
         scene.setRoot(root);
     }

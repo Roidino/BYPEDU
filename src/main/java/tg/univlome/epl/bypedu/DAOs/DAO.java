@@ -17,3 +17,4 @@ public interface DAO<T> {
     public boolean ajoute(T t);
     public boolean update(T t);
 }
+
