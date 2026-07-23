@@ -50,6 +50,22 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.45.0.0</version>
         </dependency>
+        <!--
+            sqlite-jdbc est packagé comme un vrai module JPMS (org.xerial.sqlitejdbc) dont
+            le module-info.class INTERNE déclare "requires org.slf4j". Ce n'est pas lié à
+            notre propre module-info.java (qui n'a pas besoin de slf4j) : c'est une exigence
+            du module sqlite-jdbc lui-même, donc on ne peut pas l'exclure, seulement fournir
+            une version compatible. slf4j-api 1.7.x n'a pas de module-info (jlink le rejette
+            comme "module automatique"). On force donc la 2.x, qui est un vrai module JPMS
+            nommé "org.slf4j" — ça satisfait à la fois jlink et l'exigence de sqlite-jdbc.
+            La déclaration directe ici prime sur la version transitive 1.7.36 tirée par
+            sqlite-jdbc et Ikonli (résolution Maven "nearest wins").
+        -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.13</version>
+        </dependency>
         <!-- Moteur principal Ikonli pour JavaFX -->
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
