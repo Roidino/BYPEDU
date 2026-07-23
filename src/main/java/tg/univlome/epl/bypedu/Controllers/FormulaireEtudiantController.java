@@ -95,6 +95,8 @@ public class FormulaireEtudiantController implements Initializable {
             return;
         }
         if (champClasse.getValue() == null) {
+            errorMessage.setVisible(true);
+            errorMessage.setManaged(true);
             messageErreur.setText("La classe est obligatoire.");
             return;
         }

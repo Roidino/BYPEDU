@@ -1,27 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package tg.univlome.epl.bypedu.Controllers;
-
-/**
- *
- * @author Terence PEKPELI
- */
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Window;
+import tg.univlome.epl.bypedu.Controllers.DialogUtils.TypeAlerte;
 import tg.univlome.epl.bypedu.DAOs.CoursDAO;
 import tg.univlome.epl.bypedu.models.Cours;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Contrôleur de la page "Gestion des Cours".
+ * Le formulaire d'ajout / modification utilise {@link FormulaireShell} afin
+ * de garder exactement le même style visuel que "Ajouter un étudiant", et
+ * les confirmations / alertes utilisent {@link DialogUtils}.
+ */
 public class CoursController implements Initializable {
 
     @FXML private FlowPane coursContainer;
@@ -32,6 +30,10 @@ public class CoursController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         chargerCours();
+    }
+
+    private Window fenetre() {
+        return coursContainer.getScene() != null ? coursContainer.getScene().getWindow() : null;
     }
 
     private void chargerCours() {
@@ -69,11 +71,10 @@ public class CoursController implements Initializable {
         """);
         header.getChildren().addAll(nomLabel, coefLabel);
 
-        Label classeLabel = new Label(cours.getClasse());
-        classeLabel.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
+        Label matiereLabel = new Label("Matière : " + cours.getMatiere());
+        matiereLabel.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
 
         // Infos
-        HBox ensRow = makeInfoRow("Enseignant:", cours.getEnseignant());
         HBox volRow = makeInfoRow("Volume horaire:", cours.getVolumeHoraire() + "h/semaine");
 
         Separator sep = new Separator();
@@ -99,7 +100,7 @@ public class CoursController implements Initializable {
         btnSupprimer.setOnAction(e -> supprimerCours(cours));
 
         boutons.getChildren().addAll(btnModifier, btnSupprimer);
-        carte.getChildren().addAll(header, classeLabel, ensRow, volRow, sep, boutons);
+        carte.getChildren().addAll(header, matiereLabel, volRow, sep, boutons);
         return carte;
     }
 
@@ -120,90 +121,116 @@ public class CoursController implements Initializable {
     }
 
     private void ouvrirFormulaireAjout() {
-        Dialog<Cours> dialog = creerFormulaire(null);
-        Optional<Cours> result = dialog.showAndWait();
-        result.ifPresent(c -> {
-            coursDAO.ajoute(c);
+        boolean ok = afficherFormulaireCours(null);
+        if (ok) {
             chargerCours();
-        });
+        }
     }
 
     private void ouvrirFormulaireModification(Cours cours) {
-        Dialog<Cours> dialog = creerFormulaire(cours);
-        Optional<Cours> result = dialog.showAndWait();
-        result.ifPresent(c -> {
-            coursDAO.update(c);
+        boolean ok = afficherFormulaireCours(cours);
+        if (ok) {
             chargerCours();
-        });
+        }
     }
 
-    private Dialog<Cours> creerFormulaire(Cours coursExistant) {
-        Dialog<Cours> dialog = new Dialog<>();
-        dialog.setTitle(coursExistant == null ? "Ajouter un cours" : "Modifier le cours");
+    /**
+     * Affiche le formulaire d'ajout / modification d'un cours, avec le même
+     * style visuel que le formulaire "Ajouter un étudiant".
+     */
+    private boolean afficherFormulaireCours(Cours coursExistant) {
+        boolean estModification = (coursExistant != null);
 
-        ButtonType btnOk = new ButtonType("Enregistrer", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(btnOk, ButtonType.CANCEL);
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10); grid.setVgap(10);
-        grid.setPadding(new Insets(20));
+        FormulaireShell shell = new FormulaireShell(
+            estModification ? "Modifier le cours" : "Ajouter un cours",
+            estModification ? "Modifiez les informations du cours" : "Remplissez les informations du cours",
+            estModification ? "Modifier" : "Sauvegarder");
 
         TextField tfIntitule = new TextField();
-        
-        // Remplacement des TextFields par des ComboBox
-        ComboBox<String> cbClasse = new ComboBox<>();
-        ComboBox<String> cbEns = new ComboBox<>();
-        
+        tfIntitule.setPromptText("Ex: Mathématiques Avancées");
+
+        ComboBox<String> cbMatiere = new ComboBox<>();
+        cbMatiere.getItems().setAll(coursDAO.getAllMatieres());
+        cbMatiere.setPromptText("Choisir une matière");
+
         TextField tfVol = new TextField();
+        tfVol.setPromptText("Ex: 4");
         TextField tfCoef = new TextField();
+        tfCoef.setPromptText("Ex: 5");
 
-        // Remplissage dynamique des menus déroulants avec les données de la DB
-        cbClasse.getItems().setAll(coursDAO.getAllClasses());
-        cbEns.getItems().setAll(coursDAO.getAllEnseignants());
+        shell.champ("Intitulé du cours *", tfIntitule);
+        shell.champ("Matière *", cbMatiere);
+        shell.champsSurLigne("Volume horaire (h/semaine) *", tfVol, "Coefficient *", tfCoef);
 
-        // Pré-remplissage en cas de modification
-        if (coursExistant != null) {
+        if (estModification) {
             tfIntitule.setText(coursExistant.getIntitule());
-            cbClasse.setValue(coursExistant.getClasse());
-            cbEns.setValue(coursExistant.getEnseignant());
+            cbMatiere.setValue(coursExistant.getMatiere());
             tfVol.setText(String.valueOf(coursExistant.getVolumeHoraire()));
             tfCoef.setText(String.valueOf(coursExistant.getCoefficient()));
         }
 
-        grid.addRow(0, new Label("Intitulé :"),    tfIntitule);
-        grid.addRow(1, new Label("Classe :"),      cbClasse);
-        grid.addRow(2, new Label("Enseignant :"),  cbEns);
-        grid.addRow(3, new Label("Volume (h/sem):"), tfVol);
-        grid.addRow(4, new Label("Coefficient :"), tfCoef);
-
-        dialog.getDialogPane().setContent(grid);
-
-        dialog.setResultConverter(btn -> {
-            if (btn == btnOk) {
-                Cours c = coursExistant != null ? coursExistant : new Cours();
-                c.setIntitule(tfIntitule.getText());
-                c.setClasse(cbClasse.getValue());      // Utilisation de .getValue()
-                c.setEnseignant(cbEns.getValue());     // Utilisation de .getValue()
-                c.setVolumeHoraire(Integer.parseInt(tfVol.getText()));
-                c.setCoefficient(Integer.parseInt(tfCoef.getText()));
-                return c;
+        shell.getBtnSauvegarder().setOnAction(e -> {
+            shell.masquerErreur();
+            if (tfIntitule.getText() == null || tfIntitule.getText().isBlank()) {
+                shell.afficherErreur("L'intitulé du cours est obligatoire.");
+                return;
             }
-            return null;
+            if (cbMatiere.getValue() == null) {
+                shell.afficherErreur("La matière est obligatoire.");
+                return;
+            }
+            if (tfVol.getText() == null || tfVol.getText().isBlank()
+                    || tfCoef.getText() == null || tfCoef.getText().isBlank()) {
+                shell.afficherErreur("Le volume horaire et le coefficient sont obligatoires.");
+                return;
+            }
+
+            int volumeHoraire;
+            int coefficient;
+            try {
+                volumeHoraire = Integer.parseInt(tfVol.getText().trim());
+                coefficient = Integer.parseInt(tfCoef.getText().trim());
+            } catch (NumberFormatException ex) {
+                shell.afficherErreur("Le volume horaire et le coefficient doivent être des nombres entiers.");
+                return;
+            }
+            if (volumeHoraire <= 0 || coefficient <= 0) {
+                shell.afficherErreur("Le volume horaire et le coefficient doivent être supérieurs à 0.");
+                return;
+            }
+
+            Cours c = estModification ? coursExistant : new Cours();
+            c.setIntitule(tfIntitule.getText().trim());
+            c.setMatiere(cbMatiere.getValue());
+            c.setVolumeHoraire(volumeHoraire);
+            c.setCoefficient(coefficient);
+
+            boolean ok = estModification ? coursDAO.update(c) : coursDAO.ajoute(c);
+            if (!ok) {
+                shell.afficherErreur(estModification
+                    ? "Impossible de modifier ce cours."
+                    : "Impossible d'ajouter ce cours.");
+                return;
+            }
+
+            shell.marquerSauvegarde();
+            shell.fermer();
         });
 
-        return dialog;
+        return shell.afficherEtAttendre(fenetre());
     }
 
     private void supprimerCours(Cours cours) {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-            "Supprimer \"" + cours.getIntitule() + "\" ?",
-            ButtonType.YES, ButtonType.NO);
-        confirm.setHeaderText(null);
-        confirm.showAndWait().ifPresent(r -> {
-            if (r == ButtonType.YES) {
-                coursDAO.delete(cours.getId());
+        boolean confirme = DialogUtils.confirmerSuppression(fenetre(),
+            "Vous allez supprimer le cours :", cours.getIntitule());
+        if (confirme) {
+            boolean ok = coursDAO.delete(cours.getId());
+            if (ok) {
                 chargerCours();
+                DialogUtils.afficherAlerte(fenetre(), "Succès", "Cours supprimé avec succès.", TypeAlerte.SUCCES);
+            } else {
+                DialogUtils.afficherAlerte(fenetre(), "Erreur", "Impossible de supprimer ce cours.", TypeAlerte.ERREUR);
             }
-        });
+        }
     }
 }

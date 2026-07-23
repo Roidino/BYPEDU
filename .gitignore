@@ -44,9 +44,3 @@ Thumbs.db
 *.bak
 *.log
 
-# === SQLITE (Si votre BDD est créée dans le dossier du projet) ===
-# On ignore le fichier de base de données pour éviter que chacun écrase celle des autres.
-# Laissez cette ligne si vous voulez que chacun ait sa base locale.
-*.db
-*.sqlite
-

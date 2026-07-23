@@ -12,19 +12,16 @@ public class Cours {
 
     private int id;
     private String intitule;
-    private String classe;
-    private String enseignant;
+    private String matiere;
     private int volumeHoraire;
     private int coefficient;
 
     public Cours() {}
 
-    public Cours(int id, String nom, String classe, String enseignant,
-                 int volumeHoraire, int coefficient) {
+    public Cours(int id, String nom, String matiere, int volumeHoraire, int coefficient) {
         this.id = id;
         this.intitule = nom;
-        this.classe = classe;
-        this.enseignant = enseignant;
+        this.matiere = matiere;
         this.volumeHoraire = volumeHoraire;
         this.coefficient = coefficient;
     }
@@ -36,11 +33,8 @@ public class Cours {
     public String getIntitule() { return intitule; }
     public void setIntitule(String nom) { this.intitule = nom; }
 
-    public String getClasse() { return classe; }
-    public void setClasse(String classe) { this.classe = classe; }
-
-    public String getEnseignant() { return enseignant; }
-    public void setEnseignant(String enseignant) { this.enseignant = enseignant; }
+    public String getMatiere() { return matiere; }
+    public void setMatiere(String matiere) { this.matiere = matiere; }
 
     public int getVolumeHoraire() { return volumeHoraire; }
     public void setVolumeHoraire(int volumeHoraire) { this.volumeHoraire = volumeHoraire; }

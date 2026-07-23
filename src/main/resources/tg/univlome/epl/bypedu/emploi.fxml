@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="980.0" stylesheets="@styles/emploi.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tg.univlome.epl.bypedu.Controllers.EmploiController">
+
+   <left>
+      <fx:include source="sidebar.fxml" fx:id="sidebar" />
+   </left>
+
+   <center>
+      <BorderPane>
+         <top>
+            <VBox style="-fx-padding: 20 30 10 30;" spacing="2">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="10">
+                     <children>
+                        <Label text="Emploi du Temps">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="comboClasse" prefWidth="160.0" promptText="Classe">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleAjouterCreneau" style="-fx-background-color: #1a56db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 16 8 16; -fx-cursor: hand;" text="+ Ajouter un créneau" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="labelSousTitre" style="-fx-font-size: 12px; -fx-text-fill: #6B7280;" text="" />
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: #f4f6fb;">
+               <content>
+                  <VBox style="-fx-padding: 10 30 30 30; -fx-background-color: #f4f6fb;" spacing="16">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <GridPane fx:id="grilleEmploi" hgap="10" vgap="10">
+                                 <columnConstraints>
+                                    <ColumnConstraints percentWidth="12.0" />
+                                    <ColumnConstraints percentWidth="14.66" />
+                                    <ColumnConstraints percentWidth="14.66" />
+                                    <ColumnConstraints percentWidth="14.66" />
+                                    <ColumnConstraints percentWidth="14.66" />
+                                    <ColumnConstraints percentWidth="14.66" />
+                                    <ColumnConstraints percentWidth="14.66" />
+                                 </columnConstraints>
+                              </GridPane>
+                           </center>
+                           <bottom>
+                              <Label fx:id="labelVide" managed="false" text="Aucun créneau programmé pour cette classe." visible="false" BorderPane.alignment="CENTER">
+                                 <BorderPane.margin>
+                                    <Insets top="30.0" />
+                                 </BorderPane.margin>
+                              </Label>
+                           </bottom>
+                        </BorderPane>
+                        <FlowPane fx:id="legende" hgap="18" vgap="8" />
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>

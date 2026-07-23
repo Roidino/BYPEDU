@@ -1,0 +1,13 @@
+/*
+    Style de la page "Emploi du Temps"
+*/
+
+* {
+    -fx-font-family: "Inter";
+}
+
+.combo-box {
+    -fx-background-radius: 8;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 8;
+}

@@ -30,7 +30,7 @@
                     <children>
                         <Label id="titre" text="Gestion d'etudiant"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Button id="ajouter" mnemonicParsing="false" text="+ Ajouter un etudiant"/>
+                        <Button id="ajouter" mnemonicParsing="false" text="+ Ajouter un etudiant" onAction="#ajouterEtudiant"/>
                     </children>
                 </HBox>
                 <HBox spacing="10" alignment="CENTER_LEFT" prefHeight="40" VBox.vgrow="NEVER">

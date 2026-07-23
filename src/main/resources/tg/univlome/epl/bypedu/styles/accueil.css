@@ -7,3 +7,273 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     Author     : Savastano
 */
 
+* {
+    -fx-font-family: "Inter";
+}
+
+.page-root {
+    -fx-background-color: #F4F7FB;
+}
+
+.page-content {
+    -fx-padding: 30 34 30 34;
+    -fx-background-color: linear-gradient(to bottom right, #F8FAFC, #EEF4FA);
+}
+
+.page-title {
+    -fx-text-fill: #102A43;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+}
+
+.page-subtitle {
+    -fx-text-fill: #627D98;
+    -fx-font-size: 13px;
+}
+
+.primary-button {
+    -fx-background-color: #0B7285;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 7px;
+    -fx-padding: 10 17;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: #075B6A;
+}
+
+.modern-table {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-color: #D9E2EC;
+    -fx-border-radius: 10px;
+    -fx-padding: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(16,42,67,0.08), 12, 0, 0, 3);
+}
+
+.modern-table .column-header-background {
+    -fx-background-color: #EAF2F8;
+    -fx-background-radius: 7px 7px 0 0;
+}
+
+.modern-table .column-header {
+    -fx-background-color: transparent;
+    -fx-padding: 12 10;
+}
+
+.modern-table .column-header .label {
+    -fx-text-fill: #486581;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.modern-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #EDF2F7 transparent;
+    -fx-cell-size: 54px;
+}
+
+.modern-table .table-row-cell:odd {
+    -fx-background-color: #FBFDFF;
+}
+
+.modern-table .table-row-cell:hover {
+    -fx-background-color: #E6FFFA;
+}
+
+.modern-table .table-cell {
+    -fx-text-fill: #243B53;
+    -fx-font-size: 12px;
+    -fx-padding: 0 10;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.table-action-button,
+.table-action-button-primary,
+.table-action-button-danger {
+    -fx-background-radius: 6px;
+    -fx-padding: 7 9;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+}
+
+.table-action-button {
+    -fx-background-color: #F0F4F8;
+    -fx-text-fill: #334E68;
+}
+
+.table-action-button:hover {
+    -fx-background-color: #D9E2EC;
+}
+
+.table-action-button-primary {
+    -fx-background-color: #D9F0F2;
+    -fx-text-fill: #075B6A;
+    -fx-font-weight: bold;
+}
+
+.table-action-button-primary:hover {
+    -fx-background-color: #B7E4E8;
+}
+
+.table-action-button-danger {
+    -fx-background-color: #FFF1F0;
+    -fx-text-fill: #C92A2A;
+}
+
+.table-action-button-danger:hover {
+    -fx-background-color: #FFE3E1;
+}
+
+.combo-box,
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #BCCCDC;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-padding: 8 10;
+}
+
+.combo-box:focused,
+.text-field:focused {
+    -fx-border-color: #0B7285;
+    -fx-effect: dropshadow(gaussian, rgba(11,114,133,0.18), 7, 0, 0, 1);
+}
+
+/* ===== STAT CARDS (couleurs façon maquette) ===== */
+.stat-card {
+    -fx-background-radius: 12;
+    -fx-padding: 18 20 18 20;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);
+}
+
+.stat-card-blue {
+    -fx-background-color: linear-gradient(to bottom right, #3B82F6, #1D4ED8);
+}
+
+.stat-card-purple {
+    -fx-background-color: linear-gradient(to bottom right, #A855F7, #7E22CE);
+}
+
+.stat-card-yellow {
+    -fx-background-color: linear-gradient(to bottom right, #FBBF24, #D97706);
+}
+
+.stat-card-green {
+    -fx-background-color: linear-gradient(to bottom right, #22C55E, #15803D);
+}
+
+.stat-label-light {
+    -fx-text-fill: rgba(255,255,255,0.92);
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.stat-value-light {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.stat-sub-light {
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-font-size: 11px;
+}
+
+.stat-icon-badge {
+    -fx-background-color: rgba(255,255,255,0.22);
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+}
+
+.stat-icon {
+    -fx-icon-color: white;
+}
+
+/* ===== PANEL (carte blanche contenant le tableau) ===== */
+.panel-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);
+}
+
+/* ===== TABLEAU "Inscriptions Récentes" ===== */
+.recent-table {
+    -fx-background-color: transparent;
+}
+
+.recent-table .column-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+}
+
+.recent-table .column-header {
+    -fx-background-color: transparent;
+    -fx-padding: 8 10 8 10;
+}
+
+.recent-table .column-header .label {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.recent-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #F3F4F6 transparent;
+    -fx-font-size: 13px;
+    -fx-cell-size: 46px;
+}
+
+.recent-table .table-row-cell:hover {
+    -fx-background-color: #F9FAFB;
+}
+
+.recent-table .table-cell {
+    -fx-text-fill: #374151;
+    -fx-padding: 0 10 0 10;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.recent-table .filler,
+.recent-table .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.recent-table .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6px;
+}
+
+.recent-table .scroll-bar:vertical .thumb {
+    -fx-background-color: #D1D5DB;
+    -fx-background-radius: 4;
+}
+
+.recent-table .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+/* ===== Badges de statut (colonne Statut) ===== */
+.badge {
+    -fx-padding: 3 10 3 10;
+    -fx-background-radius: 12;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER;
+}
+
+.badge-actif {
+    -fx-background-color: #8B5CF6;
+}
+
+.badge-inactif {
+    -fx-background-color: #2563EB;
+}
