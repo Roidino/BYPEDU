@@ -23,7 +23,7 @@ public class DatabaseConnection {
     public static Connection getDatabase() {
         if (instance == null) {
             try {
-                instance = DriverManager.getConnection("jdbc:sqlite:src/main/resources/tg/univlome/epl/bypedu/database.db");
+                instance = DriverManager.getConnection("jdbc:sqlite:/tg/univlome/epl/bypedu/database.db");
                 instance.createStatement()
                         .execute("PRAGMA foreign_keys = ON");
                 initialiserSchema(instance);
