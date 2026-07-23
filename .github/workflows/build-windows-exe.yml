@@ -1,11 +1,9 @@
-name: Build Windows Executable (.exe)
+name: Build Windows EXE
 
 on:
   push:
-    branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
-  workflow_dispatch:
+    tags:
+      - 'v*'
 
 jobs:
   build-windows:
@@ -24,24 +22,52 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      # 3. Compilation et empaquetage du projet avec Maven
-      - name: Build du projet avec Maven
-        run: mvn clean package -DskipTests
+      - name: Configurer WiX Toolset (requis par jpackage --type exe)
+        shell: pwsh
+        run: |
+          $wixPath = "${env:ProgramFiles(x86)}\WiX Toolset v3.14\bin"
+          
+          if (-not (Test-Path $wixPath)) {
+            choco install wixtoolset --version=3.14.1 -y --no-progress --allow-downgrade --force
+          }
+          
+          if (Test-Path $wixPath) {
+            echo $wixPath | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          } else {
+            Write-Error "WiX Toolset introuvable dans $wixPath"
+          }
 
-      # 4. Création du dossier de sortie
-      - name: Préparation du répertoire dist
-        run: mkdir dist
+      - name: Compiler et copier les dépendances
+        run: mvn -B clean package -DskipTests
 
-      # 5. Génération de l'installateur Windows avec jpackage
-      - name: Génération de l'installateur Windows avec jpackage
+      - name: Nettoyer les JARs JavaFX non spécifiques à Windows
+        shell: pwsh
+        run: |
+          $depsDir = "target/dependency"
+          if (Test-Path $depsDir) {
+            Get-ChildItem $depsDir -Filter "javafx-*.jar" |
+              Where-Object { $_.Name -notmatch "-win\.jar$" } |
+              ForEach-Object {
+                Write-Host "Suppression du JAR neutre : $($_.Name)"
+                Remove-Item $_.FullName -Force
+              }
+          }
+
+      - name: Créer le dossier de destination
+        shell: pwsh
+        run: New-Item -ItemType Directory -Force -Path dist
+
+      - name: Construire l'installeur Windows (.exe) avec jpackage
+        shell: pwsh
         run: |
           jpackage `
             --type exe `
-            --name "BypEdu" `
-            --app-version "1.0.0" `
-            --input target/ `
-            --main-jar "bypedu-1.0-SNAPSHOT.jar" `
-            --main-class tg.univlome.epl.bypedu.App `
+            --name Bypedu `
+            --dest dist `
+            --module-path "target/bypedu-1.0-SNAPSHOT.jar;target/dependency" `
+            --module tg.univlome.epl.bypedu/tg.univlome.epl.bypedu.App `
+            --add-modules ALL-MODULE-PATH `
+            --java-options "-Dfile.encoding=UTF-8" `
             --win-shortcut `
             --win-menu `
             --win-dir-chooser `
