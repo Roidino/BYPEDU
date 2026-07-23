@@ -3,17 +3,13 @@
     <groupId>tg.univlome.epl</groupId>
     <artifactId>bypedu</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
-    <!--
-        Ces profils déterminent automatiquement le classifier JavaFX (win / linux / mac)
-        selon l'OS qui exécute le build. Sur ta machine Ubuntu, "linux" s'active ; sur le
-        runner GitHub Actions windows-latest, "windows" s'active. Rien à faire manuellement.
-    -->
     <profiles>
         <profile>
             <id>javafx-windows</id>
@@ -50,44 +46,22 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.45.0.0</version>
         </dependency>
-        <!--
-            sqlite-jdbc est packagé comme un vrai module JPMS (org.xerial.sqlitejdbc) dont
-            le module-info.class INTERNE déclare "requires org.slf4j". Ce n'est pas lié à
-            notre propre module-info.java (qui n'a pas besoin de slf4j) : c'est une exigence
-            du module sqlite-jdbc lui-même, donc on ne peut pas l'exclure, seulement fournir
-            une version compatible. slf4j-api 1.7.x n'a pas de module-info (jlink le rejette
-            comme "module automatique"). On force donc la 2.x, qui est un vrai module JPMS
-            nommé "org.slf4j" — ça satisfait à la fois jlink et l'exigence de sqlite-jdbc.
-            La déclaration directe ici prime sur la version transitive 1.7.36 tirée par
-            sqlite-jdbc et Ikonli (résolution Maven "nearest wins").
-        -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>2.0.13</version>
         </dependency>
-        <!-- Moteur principal Ikonli pour JavaFX -->
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
             <version>12.3.1</version>
             <exclusions>
-                <!--
-                    Ikonli tire javafx-base/javafx-graphics/javafx-controls SANS classifier
-                    en transitif. Ça crée un second jar javafx-controls-13.jar (vide, sans
-                    module-info exploitable) à côté de celui qu'on déclare nous-mêmes avec
-                    le classifier win/linux/mac, ce qui fait échouer jlink/jpackage
-                    ("le module automatique ne peut pas être utilisé avec jlink"). On les
-                    exclut : nos propres dépendances JavaFX (classifiées) suffisent.
-                -->
                 <exclusion>
                     <groupId>org.openjfx</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- Pack FontAwesome 5 (les icônes) -->
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-fontawesome5-pack</artifactId>
@@ -100,6 +74,7 @@
             </exclusions>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -110,6 +85,7 @@
                     <release>21</release>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -119,13 +95,9 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running -->
-                        <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                     </execution>
                     <execution>
-                        <!-- Configuration for manual attach debugging -->
-                        <!-- Usage: mvn clean javafx:run@debug -->
                         <id>debug</id>
                         <configuration>
                             <options>
@@ -134,7 +106,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <!-- Configuration for automatic IDE debugging -->
                         <id>ide-debug</id>
                         <configuration>
                             <options>
@@ -143,7 +114,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <!-- Configuration for automatic IDE profiling -->
                         <id>ide-profile</id>
                         <configuration>
                             <options>
@@ -157,11 +127,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-                Copie toutes les dépendances runtime (javafx, sqlite-jdbc, ikonli...) dans
-                target/libs, pour que jpackage puisse construire le module-path complet
-                lors du packaging en .exe (voir le workflow GitHub Actions).
-            -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -172,7 +138,8 @@
                         <phase>package</phase>
                         <goals><goal>copy-dependencies</goal></goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                            <includeScope>runtime</includeScope>
                         </configuration>
                     </execution>
                 </executions>

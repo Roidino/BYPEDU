@@ -1,31 +1,48 @@
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package tg.univlome.epl.bypedu.DAOs;
 
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- *
- * @author Savastano
- */
-
 public class DatabaseConnection {
+
     private static Connection instance = null;
 
     public static Connection getDatabase() {
         if (instance == null) {
             try {
-                instance = DriverManager.getConnection("jdbc:sqlite:src/main/resources/tg/univlome/epl/bypedu/database.db");
-                instance.createStatement()
-                        .execute("PRAGMA foreign_keys = ON");
+                // 1. Définir le dossier d'application dans le répertoire utilisateur
+                String userHome = System.getProperty("user.home");
+                File appDir = new File(userHome, ".bypedu");
+                if (!appDir.exists()) {
+                    appDir.mkdirs();
+                }
+
+                File dbFile = new File(appDir, "database.db");
+
+                // 2. Si le fichier n'existe pas encore, le copier depuis les ressources du JAR
+                if (!dbFile.exists()) {
+                    try (InputStream is = DatabaseConnection.class.getResourceAsStream("/tg/univlome/epl/bypedu/database.db")) {
+                        if (is != null) {
+                            Files.copy(is, dbFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // 3. Connexion à la base de données dans le dossier utilisateur
+                String url = "jdbc:sqlite:" + dbFile.getAbsolutePath();
+                instance = DriverManager.getConnection(url);
+                instance.createStatement().execute("PRAGMA foreign_keys = ON");
+                
                 initialiserSchema(instance);
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -155,7 +172,6 @@ public class DatabaseConnection {
         return false;
     }
 
-    /** Complète une base neuve ou existante avec des données scolaires réalistes, sans doublonner les lignes. */
     private static void initialiserDonneesDemo(Connection connection) throws SQLException {
         boolean autoCommitInitial = connection.getAutoCommit();
         connection.setAutoCommit(false);
@@ -206,7 +222,6 @@ public class DatabaseConnection {
                 int indexMatiere = 0;
                 while (resultatsMatieres.next()) {
                     int matiereId = resultatsMatieres.getInt("id");
-                    String matiereNom = resultatsMatieres.getString("nom");
                     try (var enseignant = connection.prepareStatement(
                             "INSERT INTO enseignants (nom, prenom, email, telephone, matiere_id, statut) "
                             + "SELECT ?, ?, ?, ?, ?, 'ACTIF' WHERE NOT EXISTS "
@@ -230,8 +245,8 @@ public class DatabaseConnection {
                  var matieres = connection.prepareStatement("SELECT id FROM matieres");
                  var resultatsClasses = classes.executeQuery();
                  var resultatsMatieres = matieres.executeQuery()) {
-                List<Integer> classesIds = new java.util.ArrayList<>();
-                List<Integer> matieresIds = new java.util.ArrayList<>();
+                List<Integer> classesIds = new ArrayList<>();
+                List<Integer> matieresIds = new ArrayList<>();
                 while (resultatsClasses.next()) classesIds.add(resultatsClasses.getInt(1));
                 while (resultatsMatieres.next()) matieresIds.add(resultatsMatieres.getInt(1));
                 for (int classeId : classesIds) {
@@ -251,8 +266,8 @@ public class DatabaseConnection {
                      + "SELECT ?, ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM notes WHERE etudiant_id = ? AND matiere_id = ? AND trimestre = ?)");
                  var resultatsEleves = eleves.executeQuery();
                  var resultatsMatieres = matieres.executeQuery()) {
-                List<Integer> elevesIds = new java.util.ArrayList<>();
-                List<Integer> matieresIds = new java.util.ArrayList<>();
+                List<Integer> elevesIds = new ArrayList<>();
+                List<Integer> matieresIds = new ArrayList<>();
                 while (resultatsEleves.next()) elevesIds.add(resultatsEleves.getInt(1));
                 while (resultatsMatieres.next()) matieresIds.add(resultatsMatieres.getInt(1));
                 for (int eleveId : elevesIds) {
@@ -280,5 +295,4 @@ public class DatabaseConnection {
             connection.setAutoCommit(autoCommitInitial);
         }
     }
-
 }
