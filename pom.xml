@@ -49,19 +49,22 @@
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.45.0.0</version>
-            <exclusions>
-                <!--
-                    sqlite-jdbc peut tirer slf4j-api en transitif selon les versions.
-                    slf4j-api 1.7.x n'est pas un module JPMS valide (pas de module-info),
-                    donc jlink le rejette ("module automatique ne peut pas être utilisé
-                    avec jlink"). Notre module-info.java ne fait aucun "requires org.slf4j",
-                    donc on peut l'exclure sans risque.
-                -->
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <!--
+            sqlite-jdbc est packagé comme un vrai module JPMS (org.xerial.sqlitejdbc) dont
+            le module-info.class INTERNE déclare "requires org.slf4j". Ce n'est pas lié à
+            notre propre module-info.java (qui n'a pas besoin de slf4j) : c'est une exigence
+            du module sqlite-jdbc lui-même, donc on ne peut pas l'exclure, seulement fournir
+            une version compatible. slf4j-api 1.7.x n'a pas de module-info (jlink le rejette
+            comme "module automatique"). On force donc la 2.x, qui est un vrai module JPMS
+            nommé "org.slf4j" — ça satisfait à la fois jlink et l'exigence de sqlite-jdbc.
+            La déclaration directe ici prime sur la version transitive 1.7.36 tirée par
+            sqlite-jdbc et Ikonli (résolution Maven "nearest wins").
+        -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.13</version>
         </dependency>
         <!-- Moteur principal Ikonli pour JavaFX -->
         <dependency>
@@ -81,15 +84,6 @@
                     <groupId>org.openjfx</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
-                <!--
-                    Ikonli tire aussi slf4j-api (1.7.x, non modulaire) pour ses logs
-                    internes. Notre module-info.java n'en a pas besoin (pas de "requires
-                    org.slf4j"), donc on l'exclut pour éviter le même échec jlink.
-                -->
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -102,10 +96,6 @@
                 <exclusion>
                     <groupId>org.openjfx</groupId>
                     <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
