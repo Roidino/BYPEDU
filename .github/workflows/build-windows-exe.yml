@@ -1,83 +1,55 @@
-name: Build Windows EXE
+name: Build Windows Executable (.exe)
 
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - 'v*'
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
-  windows-exe:
+  build-windows:
     runs-on: windows-latest
 
     steps:
-      - name: Récupérer le code
+      # 1. Récupération du code source
+      - name: Checkout du code
         uses: actions/checkout@v4
 
-      - name: Installer le JDK 21 (fournit jpackage)
+      # 2. Configuration du JDK Java 21 (Ajusté sur Java 21)
+      - name: Configuration de Java JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
           java-version: '21'
-          cache: maven
+          distribution: 'temurin'
+          cache: 'maven'
 
-      - name: Configurer WiX Toolset (requis par jpackage --type exe)
-        shell: pwsh
-        run: |
-          $wixPath = "${env:ProgramFiles(x86)}\WiX Toolset v3.14\bin"
-          
-          # Si WiX n'est pas déjà présent sur l'image, on force l'installation
-          if (-not (Test-Path $wixPath)) {
-            choco install wixtoolset --version=3.14.1 -y --no-progress --allow-downgrade --force
-          }
-          
-          # Ajout du dossier au PATH GitHub Actions
-          if (Test-Path $wixPath) {
-            echo $wixPath | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          } else {
-            Write-Error "WiX Toolset introuvable dans $wixPath"
-          }
+      # 3. Compilation et empaquetage du projet avec Maven
+      - name: Build du projet avec Maven
+        run: mvn clean package -DskipTests
 
-      - name: Compiler et copier les dépendances
-        run: mvn -B clean package dependency:copy-dependencies -DincludeScope=runtime -DskipTests
+      # 4. Création du dossier de sortie
+      - name: Préparation du répertoire dist
+        run: mkdir dist
 
-      - name: Nettoyer les JARs JavaFX non spécifiques à Windows
-        shell: pwsh
-        run: |
-          $depsDir = "target/dependency"
-          if (Test-Path $depsDir) {
-            Get-ChildItem $depsDir -Filter "javafx-*.jar" |
-              Where-Object { $_.Name -notmatch "-win\.jar$" } |
-              ForEach-Object {
-                Write-Host "Suppression du JAR neutre : $($_.Name)"
-                Remove-Item $_.FullName -Force
-              }
-          }
-
-      - name: Créer le dossier de destination
-        shell: pwsh
-        run: New-Item -ItemType Directory -Force -Path dist
-
-      - name: Construire l'installeur Windows (.exe) avec jpackage (mode console activé)
-        shell: pwsh
+      # 5. Génération de l'installateur Windows avec jpackage
+      - name: Génération de l'installateur Windows avec jpackage
         run: |
           jpackage `
             --type exe `
-            --name Bypedu `
-            --dest dist `
-            --module-path "target/bypedu-1.0-SNAPSHOT.jar;target/dependency" `
-            --module tg.univlome.epl.bypedu/tg.univlome.epl.bypedu.App `
-            --add-modules ALL-MODULE-PATH `
-            --java-options "-Dfile.encoding=UTF-8" `
-            --win-console `
+            --name "BypEdu" `
+            --app-version "1.0.0" `
+            --input target/ `
+            --main-jar "bypedu-1.0-SNAPSHOT.jar" `
+            --main-class tg.univlome.epl.bypedu.App `
             --win-shortcut `
             --win-menu `
             --win-dir-chooser `
-            --win-per-user-install `
-            --win-upgrade-uuid 8f14e45f-ceea-467e-9573-e8e3d9c6f9a3
+            --dest dist/
 
-      - name: Publier l'installeur en tant qu'artefact
+      # 6. Sauvegarde du fichier .exe dans les artefacts GitHub
+      - name: Importer l'installateur généré dans les artefacts
         uses: actions/upload-artifact@v4
         with:
-          name: Bypedu-Windows-Installer
+          name: BypEdu-Installer-Windows
           path: dist/*.exe
