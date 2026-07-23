@@ -32,6 +32,10 @@ public class SidebarController implements Initializable {
                 enseignants.getStyleClass().remove("nav-btn");
                 enseignants.getStyleClass().add("nav-btn-active");
                 break ;
+            case "classes":
+                classes.getStyleClass().remove("nav-btn");
+                classes.getStyleClass().add("nav-btn-active");
+                break ;
             case "cours": 
                 cours.getStyleClass().remove("nav-btn");
                 cours.getStyleClass().add("nav-btn-active");
@@ -39,6 +43,10 @@ public class SidebarController implements Initializable {
             case "notes": 
                 notes.getStyleClass().remove("nav-btn");
                 notes.getStyleClass().add("nav-btn-active");
+                break ;
+            case "bulletins":
+                bulletins.getStyleClass().remove("nav-btn");
+                bulletins.getStyleClass().add("nav-btn-active");
                 break ;
             case "emploi":
                 emploi.getStyleClass().remove("nav-btn");
@@ -50,8 +58,10 @@ public class SidebarController implements Initializable {
     @FXML public Button dashboard;
     @FXML public Button etudiants;
     @FXML public Button enseignants;
+    @FXML public Button classes;
     @FXML public Button cours;
     @FXML public Button notes;
+    @FXML public Button bulletins;
     @FXML public Button emploi;
     
     @FXML public void dashboardLoad(){
@@ -67,6 +77,11 @@ public class SidebarController implements Initializable {
     public void enseignantsLoad(){
         navigate("enseignants");
     }
+
+    @FXML
+    public void classesLoad(){
+        navigate("classes");
+    }
     
     @FXML
     public void coursLoad(){
@@ -76,6 +91,11 @@ public class SidebarController implements Initializable {
     @FXML
     public void notesLoad(){
         navigate("notes");
+    }
+
+    @FXML
+    public void bulletinsLoad(){
+        navigate("bulletins");
     }
     
     @FXML

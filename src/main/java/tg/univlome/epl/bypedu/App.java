@@ -3,9 +3,6 @@ package tg.univlome.epl.bypedu;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,12 +18,13 @@ public class App extends Application {
 
     private static Scene scene;
     Connection connection = DatabaseConnection.getDatabase();
-    public static String page = "accueil";
+    public static String page = "dashboard";
     
     @Override
     public void start(Stage stage) throws IOException{
-        BorderPane root = FXMLLoader.load(getClass().getResource("accueil.fxml"));
+        BorderPane root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
         scene = new Scene(root, 980, 620);
+        stage.setTitle("BYPEDU - Gestion Scolaire");
         stage.setScene(scene);
         stage.show();
     }

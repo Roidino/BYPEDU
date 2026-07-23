@@ -50,6 +50,12 @@
                </graphic>
             </Button>
 
+            <Button styleClass="nav-btn" text="Classes" fx:id="classes" onAction="#classesLoad" >
+               <graphic>
+                  <FontIcon styleClass="nav-icon" iconLiteral="fas-layer-group" iconSize="16"/>
+               </graphic>
+            </Button>
+
             <Button styleClass="nav-btn" text="Cours" fx:id="cours" onAction="#coursLoad" >
                <graphic>
                   <FontIcon styleClass="nav-icon" iconLiteral="fas-book" iconSize="16"/>
@@ -59,6 +65,12 @@
             <Button styleClass="nav-btn" text="Notes" fx:id="notes" onAction="#notesLoad">
                <graphic>
                   <FontIcon styleClass="nav-icon" iconLiteral="fas-star" iconSize="16"/>
+               </graphic>
+            </Button>
+
+            <Button styleClass="nav-btn" text="Bulletins" fx:id="bulletins" onAction="#bulletinsLoad">
+               <graphic>
+                  <FontIcon styleClass="nav-icon" iconLiteral="fas-file-alt" iconSize="16"/>
                </graphic>
             </Button>
 

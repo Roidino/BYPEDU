@@ -65,8 +65,7 @@
               <columns>
                 <TableColumn fx:id="colNom" prefWidth="130.0" text="Nom" />
                 <TableColumn fx:id="colPrenom" prefWidth="130.0" text="Prenom" />
-                <TableColumn fx:id="colMatiere" prefWidth="100.0" text="Matière" />
-                <TableColumn fx:id="colClasse" prefWidth="90.0" text="Classe" />
+                <TableColumn fx:id="colMatiere" prefWidth="100.0" text="Spécialité" />
                 <TableColumn fx:id="colEmail" prefWidth="140.0" text="Email" />
                 <TableColumn fx:id="colTelephone" prefWidth="100.0" text="Téléphone" />
                <TableColumn fx:id="colActions" minWidth="165.0" maxWidth="165.0" prefWidth="165.0" text="Actions" />

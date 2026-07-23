@@ -1,19 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@styles/accueil.css" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" id="root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@styles/accueil.css" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="980.0" id="root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tg.univlome.epl.bypedu.Controllers.DashboardController">
     <left>
         <fx:include source="sidebar.fxml" fx:id="sidebar"/>
     </left>
     <center>
-      <Label text="Accueil" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="40.0" />
-         </font>
-      </Label>
-   </center>
+        <VBox spacing="24" style="-fx-padding: 30 40 30 40; -fx-background-color: #F9FAFB;">
+            <children>
+                <Label text="Tableau de Bord" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #111827;"/>
+
+                <HBox spacing="20">
+                    <children>
+                        <VBox styleClass="stat-card, stat-card-blue" HBox.hgrow="ALWAYS">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label text="Total Étudiants" styleClass="stat-label-light"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <StackPane styleClass="stat-icon-badge">
+                                            <FontIcon iconLiteral="fas-user-graduate" iconSize="16" styleClass="stat-icon"/>
+                                        </StackPane>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="lblNbEtudiants" text="0" styleClass="stat-value-light"/>
+                                <Label text="Toutes classes confondues" styleClass="stat-sub-light"/>
+                            </children>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-card-purple" HBox.hgrow="ALWAYS">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label text="Enseignants" styleClass="stat-label-light"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <StackPane styleClass="stat-icon-badge">
+                                            <FontIcon iconLiteral="fas-chalkboard-teacher" iconSize="16" styleClass="stat-icon"/>
+                                        </StackPane>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="lblNbEnseignants" text="0" styleClass="stat-value-light"/>
+                                <Label text="Personnel enseignant" styleClass="stat-sub-light"/>
+                            </children>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-card-blue" HBox.hgrow="ALWAYS">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label text="Classes" styleClass="stat-label-light"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <StackPane styleClass="stat-icon-badge">
+                                            <FontIcon iconLiteral="fas-layer-group" iconSize="16" styleClass="stat-icon"/>
+                                        </StackPane>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="lblNbClasses" text="0" styleClass="stat-value-light"/>
+                                <Label text="Groupes pédagogiques" styleClass="stat-sub-light"/>
+                            </children>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-card-yellow" HBox.hgrow="ALWAYS">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label text="Cours Actifs" styleClass="stat-label-light"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <StackPane styleClass="stat-icon-badge">
+                                            <FontIcon iconLiteral="fas-book" iconSize="16" styleClass="stat-icon"/>
+                                        </StackPane>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="lblNbCours" text="0" styleClass="stat-value-light"/>
+                                <Label text="Ce semestre" styleClass="stat-sub-light"/>
+                            </children>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-card-green" HBox.hgrow="ALWAYS">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label text="Moyenne Générale" styleClass="stat-label-light"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <StackPane styleClass="stat-icon-badge">
+                                            <FontIcon iconLiteral="fas-chart-line" iconSize="16" styleClass="stat-icon"/>
+                                        </StackPane>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="lblMoyenneGenerale" text="0.00/20" styleClass="stat-value-light"/>
+                                <Label text="Toutes classes confondues" styleClass="stat-sub-light"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <VBox styleClass="panel-card" spacing="14" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label text="Inscriptions Récentes" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #111827;"/>
+                        <TableView fx:id="tableInscriptions" styleClass="recent-table" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="colNom" text="Nom" minWidth="160"/>
+                                <TableColumn fx:id="colClasse" text="Classe" minWidth="150"/>
+                                <TableColumn fx:id="colRole" text="Rôle" minWidth="100"/>
+                                <TableColumn fx:id="colDate" text="Date" minWidth="110"/>
+                                <TableColumn fx:id="colStatut" text="Statut" minWidth="100"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TableView>
+                    </children>
+                    <padding>
+                        <Insets top="16" right="20" bottom="20" left="20"/>
+                    </padding>
+                </VBox>
+            </children>
+        </VBox>
+    </center>
 </BorderPane>

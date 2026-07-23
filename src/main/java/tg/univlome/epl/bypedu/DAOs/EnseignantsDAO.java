@@ -17,11 +17,9 @@ public class EnseignantsDAO implements DAO<Enseignants> {
     public List<Enseignants> getAll() {
         List<Enseignants> liste = new ArrayList<>();
         String sql = "SELECT e.id, e.nom, e.prenom, e.email, e.telephone, "
-                   + "m.nom AS nom_matiere, c.nom AS nom_classe "
+                   + "m.nom AS nom_matiere "
                    + "FROM enseignants e "
-                   + "LEFT JOIN matieres m ON e.matiere_id = m.id "
-                   + "LEFT JOIN enseignant_classes ec ON e.id = ec.enseignant_id "
-                   + "LEFT JOIN classes c ON ec.classe_id = c.id";
+                   + "LEFT JOIN matieres m ON e.matiere_id = m.id";
 
         if (connection == null) return liste;
 
@@ -35,7 +33,6 @@ public class EnseignantsDAO implements DAO<Enseignants> {
                 e.setEmail(rs.getString("email"));
                 e.setTelephone(rs.getString("telephone"));
                 e.setMatiere(rs.getString("nom_matiere"));
-                e.setClasse(rs.getString("nom_classe"));
                 liste.add(e);
             }
         } catch (SQLException ex) {
@@ -49,8 +46,6 @@ public class EnseignantsDAO implements DAO<Enseignants> {
         String sqlSelectId = "SELECT id FROM enseignants WHERE email = ?";
         String sqlEnseignant = "INSERT INTO enseignants (nom, prenom, email, telephone, matiere_id) "
                              + "VALUES (?, ?, ?, ?, (SELECT id FROM matieres WHERE nom = ?))";
-        String sqlLiaison = "INSERT INTO enseignant_classes (enseignant_id, classe_id) "
-                          + "VALUES (?, (SELECT id FROM classes WHERE nom = ?))";
         
         if (connection == null) return false;
 
@@ -82,30 +77,6 @@ public class EnseignantsDAO implements DAO<Enseignants> {
                 }
             }
 
-            if (idEnseignant != -1 && e.getClasse() != null && !e.getClasse().isEmpty()) {
-                String sqlCheckLiaison = "SELECT 1 FROM enseignant_classes WHERE enseignant_id = ? "
-                                       + "AND classe_id = (SELECT id FROM classes WHERE nom = ?)";
-                boolean liaisonExiste = false;
-                try (PreparedStatement pstmtCheckL = connection.prepareStatement(sqlCheckLiaison)) {
-                    pstmtCheckL.setInt(1, idEnseignant);
-                    pstmtCheckL.setString(2, e.getClasse());
-                    try (ResultSet rsL = pstmtCheckL.executeQuery()) {
-                        if (rsL.next()) liaisonExiste = true;
-                    }
-                }
-
-                if (!liaisonExiste) {
-                    try (PreparedStatement pstmtLiaison = connection.prepareStatement(sqlLiaison)) {
-                        pstmtLiaison.setInt(1, idEnseignant);
-                        pstmtLiaison.setString(2, e.getClasse());
-                        pstmtLiaison.executeUpdate();
-                    }
-                } else {
-                    connection.rollback();
-                    return false;
-                }
-            }
-
             connection.commit();
             return true;
         } catch (SQLException ex) {
@@ -117,44 +88,6 @@ public class EnseignantsDAO implements DAO<Enseignants> {
         }
     }
 
-    public boolean deleteAffectation(int idEnseignant, String nomClasse) {
-    String sqlCompteAffectations = "SELECT COUNT(*) FROM enseignant_classes WHERE enseignant_id = ?";
-    String sqlDeleteLiaison = "DELETE FROM enseignant_classes WHERE enseignant_id = ? "
-                            + "AND classe_id = (SELECT id FROM classes WHERE nom = ?)";
-    
-    if (connection == null) return false;
-
-    try {
-        // Étape 1 : Compter combien d'affectations il reste à cet enseignant
-        int nombreAffectations = 0;
-        try (PreparedStatement pstmtCheck = connection.prepareStatement(sqlCompteAffectations)) {
-            pstmtCheck.setInt(1, idEnseignant);
-            try (ResultSet rs = pstmtCheck.executeQuery()) {
-                if (rs.next()) {
-                    nombreAffectations = rs.getInt(1);
-                }
-            }
-        }
-
-        // Étape 2 : Si c'est la toute dernière affectation (1 seule restante),
-        // on fait un clean-up complet via la méthode delete() globale pour éviter les blocages de clés étrangères
-        if (nombreAffectations <= 1) {
-            System.out.println("Dernière affectation détectée. Suppression complète de l'enseignant.");
-            return delete(idEnseignant); // Appelle ta méthode delete globale qui gère les PRAGMA foreign_keys
-        }
-
-        // Étape 3 : S'il lui reste d'autres classes, on retire juste celle-ci
-        try (PreparedStatement pstmtDelete = connection.prepareStatement(sqlDeleteLiaison)) {
-            pstmtDelete.setInt(1, idEnseignant);
-            pstmtDelete.setString(2, nomClasse);
-            return pstmtDelete.executeUpdate() > 0;
-        }
-
-    } catch (SQLException ex) {
-        System.err.println("Erreur lors du retrait de l'affectation : " + ex.getMessage());
-        return false;
-    }
-}
     @Override
     public boolean update(Enseignants e) {
         String sqlCheckEmail = "SELECT id FROM enseignants WHERE email = ? AND id != ?";
@@ -192,8 +125,6 @@ public class EnseignantsDAO implements DAO<Enseignants> {
 
     @Override
     public boolean delete(int idEnseignant) {
-        String sqlLiaisonsClasses = "DELETE FROM enseignant_classes WHERE enseignant_id = ?";
-        String sqlSupprimerCours = "DELETE FROM cours WHERE enseignant_id = ?"; 
         String sqlEnseignant = "DELETE FROM enseignants WHERE id = ?";
         
         if (connection == null) return false;
@@ -201,16 +132,6 @@ public class EnseignantsDAO implements DAO<Enseignants> {
         try (java.sql.Statement stmtPragma = connection.createStatement()) {
             stmtPragma.execute("PRAGMA foreign_keys = OFF;");
             connection.setAutoCommit(false);
-
-            try (PreparedStatement pstmtClasses = connection.prepareStatement(sqlLiaisonsClasses)) {
-                pstmtClasses.setInt(1, idEnseignant);
-                pstmtClasses.executeUpdate();
-            }
-
-            try (PreparedStatement pstmtCours = connection.prepareStatement(sqlSupprimerCours)) {
-                pstmtCours.setInt(1, idEnseignant);
-                pstmtCours.executeUpdate();
-            }
 
             int lignesAffectees = 0;
             try (PreparedStatement pstmtEnseignant = connection.prepareStatement(sqlEnseignant)) {

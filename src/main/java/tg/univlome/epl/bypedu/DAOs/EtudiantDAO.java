@@ -78,7 +78,7 @@ public class EtudiantDAO implements DAO<Etudiant>{
             exec.setString(1, "%" + terme + "%");
             exec.setString(2, "%" + terme + "%");
             result = exec.executeQuery();
-            if(result.next()){
+            while(result.next()){
                 liste.add(creeEtudiant(result));
             }
         } catch (SQLException ex) { 
@@ -97,7 +97,7 @@ public class EtudiantDAO implements DAO<Etudiant>{
             exec = connection.prepareStatement(sql);
             exec.setInt(1, classeId);
             result = exec.executeQuery();
-            if(result.next()){
+            while(result.next()){
                 liste.add(creeEtudiant(result));
             }
         } catch (SQLException ex) { 

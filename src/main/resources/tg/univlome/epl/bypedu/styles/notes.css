@@ -1,0 +1,157 @@
+/*
+    Style de la page "Gestion des Notes"
+    Reprend la charte graphique des pages Enseignants / Étudiants
+*/
+
+.main-title {
+    -fx-text-fill: #2C3E50;
+}
+
+.btn-primary {
+    -fx-background-color: #2ECC71;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+.btn-primary:hover {
+    -fx-background-color: #27AE60;
+}
+
+.btn-secondary {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover {
+    -fx-background-color: #2980B9;
+}
+
+.form-input {
+    -fx-background-radius: 4;
+    -fx-border-color: #BDC3C7;
+    -fx-border-radius: 4;
+    -fx-background-color: #FFFFFF;
+}
+.form-input:focused {
+    -fx-border-color: #3498DB;
+    -fx-border-width: 1.5;
+}
+
+.btn-download {
+    -fx-background-color: #0F766E;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.btn-download:hover {
+    -fx-background-color: #115E59;
+}
+
+.bulletin-subtitle {
+    -fx-text-fill: #64748B;
+    -fx-font-size: 13px;
+}
+
+.bulletin-badge {
+    -fx-background-color: #CCFBF1;
+    -fx-background-radius: 14;
+    -fx-padding: 7 12;
+    -fx-text-fill: #0F766E;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.bulletin-panel,
+.bulletin-info {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-padding: 22;
+}
+
+.bulletin-info {
+    -fx-background-color: #ECFEFF;
+    -fx-border-color: #A5F3FC;
+}
+
+.panel-title {
+    -fx-text-fill: #1E293B;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.panel-help,
+.bulletin-info .label {
+    -fx-text-fill: #64748B;
+    -fx-font-size: 13px;
+}
+
+.field-label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.modern-table {
+    -fx-background-color: transparent;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 6;
+}
+.modern-table .column-header-background {
+    -fx-background-color: #F8FAFC;
+}
+.modern-table .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-weight: bold;
+    -fx-padding: 8;
+}
+.modern-table .table-row-cell:even {
+    -fx-background-color: #F8FAFC;
+}
+.modern-table .table-row-cell:selected {
+    -fx-background-color: #CBD5E1;
+    -fx-text-fill: #0F172A;
+}
+
+/* ===== Cartes récapitulatives (bas de page, façon maquette) ===== */
+.summary-card {
+    -fx-background-radius: 12;
+    -fx-padding: 18 20 18 20;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);
+}
+
+.summary-card-green {
+    -fx-background-color: linear-gradient(to bottom right, #22C55E, #15803D);
+}
+
+.summary-card-blue {
+    -fx-background-color: linear-gradient(to bottom right, #3B82F6, #1D4ED8);
+}
+
+.summary-card-purple {
+    -fx-background-color: linear-gradient(to bottom right, #A855F7, #7E22CE);
+}
+
+.summary-label {
+    -fx-text-fill: rgba(255,255,255,0.92);
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.summary-value {
+    -fx-text-fill: white;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.summary-sub {
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-font-size: 11px;
+}
