@@ -21,13 +21,21 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Installer WiX Toolset 3 (requis par jpackage --type exe)
+      - name: Configurer WiX Toolset (requis par jpackage --type exe)
         shell: pwsh
         run: |
-          choco install wixtoolset --version=3.14.1 -y --no-progress
           $wixPath = "${env:ProgramFiles(x86)}\WiX Toolset v3.14\bin"
+          
+          # Si WiX n'est pas déjà présent sur l'image, on force l'installation
+          if (-not (Test-Path $wixPath)) {
+            choco install wixtoolset --version=3.14.1 -y --no-progress --allow-downgrade --force
+          }
+          
+          # Ajout du dossier au PATH GitHub Actions
           if (Test-Path $wixPath) {
             echo $wixPath | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          } else {
+            Write-Error "WiX Toolset introuvable dans $wixPath"
           }
 
       - name: Compiler et copier les dépendances
