@@ -58,7 +58,7 @@ jobs:
         shell: pwsh
         run: New-Item -ItemType Directory -Force -Path dist
 
-      - name: Construire l'installeur Windows (.exe) avec jpackage
+      - name: Construire l'installeur Windows (.exe) avec jpackage (mode console activé)
         shell: pwsh
         run: |
           jpackage `
@@ -69,6 +69,7 @@ jobs:
             --module tg.univlome.epl.bypedu/tg.univlome.epl.bypedu.App `
             --add-modules ALL-MODULE-PATH `
             --java-options "-Dfile.encoding=UTF-8" `
+            --win-console `
             --win-shortcut `
             --win-menu `
             --win-dir-chooser `
