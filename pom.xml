@@ -55,6 +55,20 @@
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
             <version>12.3.1</version>
+            <exclusions>
+                <!--
+                    Ikonli tire javafx-base/javafx-graphics/javafx-controls SANS classifier
+                    en transitif. Ça crée un second jar javafx-controls-13.jar (vide, sans
+                    module-info exploitable) à côté de celui qu'on déclare nous-mêmes avec
+                    le classifier win/linux/mac, ce qui fait échouer jlink/jpackage
+                    ("le module automatique ne peut pas être utilisé avec jlink"). On les
+                    exclut : nos propres dépendances JavaFX (classifiées) suffisent.
+                -->
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Pack FontAwesome 5 (les icônes) -->
@@ -62,6 +76,12 @@
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-fontawesome5-pack</artifactId>
             <version>12.3.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <build>
