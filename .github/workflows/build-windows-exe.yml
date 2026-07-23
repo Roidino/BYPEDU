@@ -1,15 +1,12 @@
 name: Build Windows EXE
-
 on:
   workflow_dispatch:
   push:
     tags:
       - 'v*'
-
 jobs:
   windows-exe:
     runs-on: windows-latest
-
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -20,6 +17,12 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
+
+      - name: Installer WiX Toolset 3 (requis par jpackage --type exe)
+        shell: pwsh
+        run: |
+          choco install wixtoolset --version=3.14.1 -y
+          echo "C:\Program Files (x86)\WiX Toolset v3.14\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Compiler et récupérer les dépendances
         run: mvn -B clean package -DskipTests
@@ -34,20 +37,25 @@ jobs:
               Remove-Item $_.FullName -Force
             }
 
-      - name: Construire l'exécutable Windows avec jpackage
+      - name: Construire l'installeur Windows (.exe) avec jpackage
         shell: pwsh
         run: |
           jpackage `
-            --type app-image `
+            --type exe `
             --name Bypedu `
             --dest dist `
             --module-path "target/bypedu-1.0-SNAPSHOT.jar;target/libs" `
             --module tg.univlome.epl.bypedu/tg.univlome.epl.bypedu.App `
             --add-modules ALL-MODULE-PATH `
-            --java-options "-Dfile.encoding=UTF-8"
+            --java-options "-Dfile.encoding=UTF-8" `
+            --win-shortcut `
+            --win-menu `
+            --win-dir-chooser `
+            --win-per-user-install `
+            --win-upgrade-uuid 8f14e45f-ceea-467e-9573-e8e3d9c6f9a3
 
-      - name: Publier l'exécutable en tant qu'artefact
+      - name: Publier l'installeur en tant qu'artefact
         uses: actions/upload-artifact@v4
         with:
-          name: Bypedu-Windows
-          path: dist/Bypedu
+          name: Bypedu-Windows-Installer
+          path: dist/*.exe
