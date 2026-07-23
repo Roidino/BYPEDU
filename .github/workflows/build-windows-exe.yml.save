@@ -24,16 +24,6 @@ jobs:
       - name: Compiler et récupérer les dépendances
         run: mvn -B clean package -DskipTests
 
-      - name: Supprimer les jars JavaFX non classifiés (placeholders vides)
-        shell: pwsh
-        run: |
-          Get-ChildItem target/libs -Filter "javafx-*.jar" |
-            Where-Object { $_.Name -notmatch "-win\.jar$" } |
-            ForEach-Object {
-              Write-Host "Suppression: $($_.Name)"
-              Remove-Item $_.FullName -Force
-            }
-
       - name: Construire l'exécutable Windows avec jpackage
         shell: pwsh
         run: |
@@ -47,7 +37,4 @@ jobs:
             --java-options "-Dfile.encoding=UTF-8"
 
       - name: Publier l'exécutable en tant qu'artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Bypedu-Windows
-          path: dist/Bypedu
+        uses: 
